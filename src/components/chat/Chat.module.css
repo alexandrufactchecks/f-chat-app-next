@@ -2,19 +2,19 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  background-color: var(--bg-color);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease;
   display: flex;
   flex-direction: column;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
-  color: var(--text-color);
   overflow: hidden;
-  z-index: 1; /* Ensure it's above other elements */
-  background: linear-gradient(145deg, var(--bg-gradient-1), var(--bg-gradient-2));
+}
+
+.visible {
+  opacity: 1;
 }
 
 .brandStrip {
@@ -22,121 +22,430 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(90deg, var(--accent-color), #818cf8);
   z-index: 20;
 }
 
 .chatMain {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: 100%;
-  max-width: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  max-width: 1400px;
   margin: 0 auto;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
+  padding: 0;
 }
 
 .chatContent {
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
   overflow: hidden;
+  height: 100%;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
-  justify-content: space-between;
-  position: relative;
-  /* Additional fixes to ensure clean layout */
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
 }
 
-/* Ensure no unwanted elements appear */
-.chatContent::before,
-.chatContent::after {
-  content: none !important;
-  display: none !important;
+/* Welcome screen styling - optimized for less scrolling */
+.welcomeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 20px 20px 10px;
+  overflow-y: auto;
+  animation: fadeIn 0.5s ease;
+  width: 100%;
 }
 
-.visible {
-  visibility: visible !important;
-  opacity: 1 !important;
-  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.welcomeContent {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.welcomeHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.welcomeIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-right: 16px;
+}
+
+.mirroredF {
+  display: inline-block;
+  transform: scaleX(-1);
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  font-family: 'Agbalumo', cursive;
+}
+
+.welcomeTitle {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--accent-color), #818cf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: left;
+  margin: 0;
+}
+
+.welcomeSubtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+  max-width: 800px;
+  text-align: center;
+}
+
+.examplesContainer {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.examplesTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.examplePrompts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.examplePrompt {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.examplePrompt:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-color);
+}
+
+.exampleTitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--accent-color);
+}
+
+.exampleText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Large Desktop */
+@media screen and (min-width: 1400px) {
+  .chatMain {
+    max-width: 1600px;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+  
+  .chatContent {
+    max-width: 1200px;
+  }
+  
+  .welcomeContent {
+    max-width: 1200px;
+  }
+  
+  .examplePrompts {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-/* Media queries for different devices */
-@media screen and (min-width: 1200px) {
+/* Desktop */
+@media screen and (min-width: 1200px) and (max-width: 1399px) {
   .chatMain {
-    padding: 24px 0;
+    max-width: 1400px;
   }
   
   .chatContent {
     max-width: 1100px;
   }
+  
+  .examplePrompts {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* Desktop */
-@media screen and (min-width: 1024px) and (max-width: 1199px) {
+/* Small Desktop */
+@media screen and (min-width: 992px) and (max-width: 1199px) {
   .chatMain {
-    padding: 20px 0;
+    max-width: 992px;
   }
   
   .chatContent {
     max-width: 900px;
   }
-}
-
-/* Tablet devices */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-  .chatMain {
-    padding: 16px 0;
+  
+  .welcomeIcon {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
   }
   
-  .chatContent {
-    padding: 0 16px;
-    max-width: 800px;
+  .welcomeTitle {
+    font-size: 30px;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 17px;
+    margin-bottom: 20px;
+  }
+  
+  .examplePrompts {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Mobile layout adjustments */
-@media screen and (max-width: 767px) {
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 991px) {
   .chatMain {
-    padding: 12px 0;
-  }
-  
-  .chatContent {
-    padding: 0 12px;
     max-width: 100%;
   }
-}
-
-/* Small mobile devices */
-@media screen and (max-width: 480px) {
-  .chatMain {
-    padding: 8px 0;
-  }
   
   .chatContent {
-    padding: 0 8px;
+    max-width: 800px;
+    padding: 0 16px;
+  }
+  
+  .welcomeContainer {
+    padding: 16px 16px 10px;
+  }
+  
+  .welcomeContent {
+    padding: 10px;
+  }
+  
+  .welcomeIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
+    margin-right: 14px;
+  }
+  
+  .welcomeTitle {
+    font-size: 28px;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .examplesTitle {
+    font-size: 17px;
+    margin-bottom: 14px;
+  }
+  
+  .examplePrompts {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  
+  .examplePrompt {
+    padding: 14px;
+  }
+  
+  .exampleTitle {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+}
+
+/* Mobile */
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  .chatContent {
+    max-width: 100%;
+    padding: 0 14px;
+  }
+  
+  .welcomeContainer {
+    padding: 14px 14px 8px;
+  }
+  
+  .welcomeContent {
+    padding: 8px;
+  }
+  
+  .welcomeHeader {
+    margin-bottom: 12px;
+  }
+  
+  .welcomeIcon {
+    width: 46px;
+    height: 46px;
+    font-size: 24px;
+    margin-right: 12px;
+  }
+  
+  .welcomeTitle {
+    font-size: 26px;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  
+  .examplesTitle {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .examplePrompts {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .examplePrompt {
+    padding: 14px;
+  }
+}
+
+/* Small Mobile */
+@media screen and (max-width: 575px) {
+  .chatContent {
+    padding: 0 10px;
+  }
+  
+  .welcomeContainer {
+    padding: 12px 10px 6px;
+  }
+  
+  .welcomeContent {
+    padding: 6px;
+  }
+  
+  .welcomeHeader {
+    margin-bottom: 10px;
+  }
+  
+  .welcomeIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+  
+  .welcomeTitle {
+    font-size: 22px;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  
+  .examplesTitle {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .examplePrompts {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .examplePrompt {
+    padding: 12px;
+  }
+  
+  .exampleTitle {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .exampleText {
+    font-size: 13px;
+  }
+}
+
+/* Extra Small Mobile */
+@media screen and (max-width: 375px) {
+  .welcomeIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  
+  .welcomeTitle {
+    font-size: 20px;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  
+  .examplePrompt {
+    padding: 10px;
+  }
+  
+  .exampleTitle {
+    font-size: 13px;
+  }
+  
+  .exampleText {
+    font-size: 12px;
+  }
+}
+
+/* Fix for iPhone X and newer with notches */
+@supports (padding: max(0px)) {
+  .chatScreen {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 }
 

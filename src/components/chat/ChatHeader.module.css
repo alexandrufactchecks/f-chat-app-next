@@ -1,41 +1,24 @@
 .chatHeader {
-  background-color: rgba(30, 41, 59, 0.4);
-  padding: 14px 20px;
+  background-color: transparent;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
   z-index: 10;
   flex-shrink: 0;
-  margin-bottom: 12px;
   width: 100%;
-  max-width: 1000px;
-  border-radius: 16px;
-  backdrop-filter: blur(var(--backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--backdrop-blur));
-  border: 1px solid var(--border-color);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid var(--border-color);
   transition: all 0.3s ease;
 }
 
 .headerLeft, .headerRight {
   display: flex;
   align-items: center;
-  flex: 1;
 }
 
 .headerRight {
   justify-content: flex-end;
-}
-
-.headerCenter {
-  flex: 2;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 10px;
-  justify-content: center;
 }
 
 .headerLogo {
@@ -49,7 +32,7 @@
 }
 
 .logoText {
-  background: linear-gradient(90deg, #60a5fa, #818cf8);
+  background: linear-gradient(90deg, var(--accent-color), #818cf8);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -59,64 +42,37 @@
 .logoSpin {
   display: inline-block;
   font-family: 'Agbalumo', cursive;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
   transform: scaleX(-1);
-  background: linear-gradient(135deg, var(--accent-color), #818cf8);
+  background-color: var(--accent-color);
   color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
 }
 
 .logoSpin:hover {
-  transform: scaleX(-1) translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.headerTitle {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-color);
-  background-color: rgba(255, 255, 255, 0.08);
-  padding: 8px 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(var(--backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--backdrop-blur));
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.headerTitle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-.titleIcon {
-  font-size: 18px;
+  transform: scaleX(-1) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Model badge */
 .modelBadge {
-  background: linear-gradient(135deg, var(--accent-color), #818cf8);
+  background-color: var(--accent-color);
   color: white;
   font-size: 12px;
   font-weight: 500;
   padding: 4px 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-left: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Version badge */
@@ -126,31 +82,64 @@
   font-size: 12px;
   font-weight: 500;
   padding: 4px 8px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-left: 12px;
   border: 1px solid var(--border-color);
 }
 
 /* Theme switch container */
 .themeSwitchContainer {
-  background-color: rgba(255, 255, 255, 0.08);
-  padding: 6px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(var(--backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--backdrop-blur));
   margin-left: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-color);
+}
+
+/* Large Desktop */
+@media screen and (min-width: 1400px) {
+  .chatHeader {
+    padding: 14px 24px;
+  }
+  
+  .headerLogo {
+    font-size: 22px;
+  }
+  
+  .logoSpin {
+    font-size: 24px;
+    width: 38px;
+    height: 38px;
+    margin-right: 12px;
+  }
+  
+  .modelBadge {
+    font-size: 13px;
+    padding: 5px 12px;
+    margin-left: 14px;
+  }
+  
+  .versionBadge {
+    font-size: 13px;
+    padding: 5px 10px;
+    margin-left: 14px;
+  }
+  
+  .themeSwitchContainer {
+    margin-left: 14px;
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 992px) and (max-width: 1399px) {
+  .chatHeader {
+    padding: 12px 20px;
+  }
 }
 
 /* Tablet */
-@media screen and (max-width: 900px) {
+@media screen and (min-width: 768px) and (max-width: 991px) {
   .chatHeader {
-    padding: 12px 16px;
-    border-radius: 14px;
+    padding: 10px 16px;
   }
   
   .headerLogo {
@@ -158,23 +147,10 @@
   }
   
   .logoSpin {
-    font-family: 'Agbalumo', cursive;
-    font-size: 22px;
-    font-weight: 400;
+    font-size: 20px;
     width: 32px;
     height: 32px;
     margin-right: 8px;
-    border-radius: 10px;
-  }
-  
-  .headerTitle {
-    font-size: 14px;
-    padding: 6px 12px;
-  }
-  
-  .themeSwitchContainer {
-    padding: 5px;
-    margin-left: 10px;
   }
   
   .modelBadge {
@@ -182,22 +158,22 @@
     padding: 3px 8px;
     margin-left: 10px;
   }
+  
+  .versionBadge {
+    font-size: 11px;
+    padding: 3px 8px;
+    margin-left: 10px;
+  }
+  
+  .themeSwitchContainer {
+    margin-left: 10px;
+  }
 }
 
 /* Mobile */
-@media screen and (max-width: 600px) {
+@media screen and (min-width: 576px) and (max-width: 767px) {
   .chatHeader {
-    padding: 10px 14px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-  }
-  
-  .headerCenter {
-    display: none;
-  }
-  
-  .headerLeft, .headerRight {
-    flex: 1;
+    padding: 8px 14px;
   }
   
   .headerLogo {
@@ -205,23 +181,15 @@
   }
   
   .logoSpin {
-    font-family: 'Agbalumo', cursive;
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 18px;
     width: 30px;
     height: 30px;
-    margin-right: 6px;
-    border-radius: 8px;
-  }
-  
-  .themeSwitchContainer {
-    padding: 4px;
-    margin-left: 8px;
+    margin-right: 8px;
   }
   
   .modelBadge {
     font-size: 10px;
-    padding: 3px 8px;
+    padding: 3px 7px;
     margin-left: 8px;
   }
   
@@ -230,14 +198,52 @@
     padding: 3px 6px;
     margin-left: 8px;
   }
+  
+  .themeSwitchContainer {
+    margin-left: 8px;
+  }
 }
 
 /* Small Mobile */
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 575px) {
   .chatHeader {
     padding: 8px 12px;
+  }
+  
+  .headerLogo {
+    font-size: 15px;
+  }
+  
+  .logoSpin {
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+  }
+  
+  .modelBadge {
+    font-size: 9px;
+    padding: 2px 6px;
+    margin-left: 6px;
     border-radius: 10px;
-    margin-bottom: 8px;
+  }
+  
+  .versionBadge {
+    font-size: 9px;
+    padding: 2px 5px;
+    margin-left: 6px;
+    border-radius: 10px;
+  }
+  
+  .themeSwitchContainer {
+    margin-left: 6px;
+  }
+}
+
+/* Extra Small Mobile */
+@media screen and (max-width: 375px) {
+  .chatHeader {
+    padding: 6px 10px;
   }
   
   .headerLogo {
@@ -245,38 +251,35 @@
   }
   
   .logoSpin {
-    font-family: 'Agbalumo', cursive;
-    font-size: 18px;
-    font-weight: 400;
-    width: 26px;
-    height: 26px;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
     margin-right: 5px;
-    border-radius: 6px;
-  }
-  
-  .themeSwitchContainer {
-    padding: 3px;
-    margin-left: 6px;
   }
   
   .modelBadge {
-    font-size: 9px;
-    padding: 2px 6px;
-    margin-left: 6px;
-    border-radius: 6px;
+    font-size: 8px;
+    padding: 2px 5px;
+    margin-left: 5px;
+    border-radius: 8px;
   }
   
   .versionBadge {
-    font-size: 9px;
-    padding: 2px 5px;
-    margin-left: 6px;
+    font-size: 8px;
+    padding: 2px 4px;
+    margin-left: 5px;
+    border-radius: 8px;
+  }
+  
+  .themeSwitchContainer {
+    margin-left: 5px;
   }
 }
 
 /* Fix for iPhone X and newer with notches */
 @supports (padding: max(0px)) {
   .chatHeader {
-    padding-top: max(14px, env(safe-area-inset-top));
+    padding-top: max(12px, env(safe-area-inset-top));
     padding-left: max(20px, env(safe-area-inset-left));
     padding-right: max(20px, env(safe-area-inset-right));
   }

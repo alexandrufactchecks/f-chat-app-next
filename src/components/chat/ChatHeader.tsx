@@ -19,7 +19,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ model = 'deepseek-reasoner' }) 
   };
 
   return (
-    <div className={`${styles.chatHeader} glass-effect`}>
+    <div className={styles.chatHeader}>
       <div className={styles.headerLeft}>
         <div className={styles.headerLogo}>
           <span className={styles.logoSpin}>F</span>
@@ -27,26 +27,19 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ model = 'deepseek-reasoner' }) 
         </div>
       </div>
       
-      <div className={styles.headerCenter}>
-        <div className={styles.headerTitle}>
-          <span className={styles.titleIcon}>🔍</span>
-          <span>AI Fact-Checking Assistant</span>
-        </div>
-      </div>
-      
       <div className={styles.headerRight}>
-        {/* Make theme switch visible */}
-        <div className={styles.themeSwitchContainer}>
-          <ThemeSwitch />
-        </div>
-        
         {/* Model indicator */}
         <div className={styles.modelBadge}>
           {formatModelName(model)}
         </div>
         
         {/* Version indicator */}
-        <div className={styles.versionBadge}>v1.1</div>
+        <div className={styles.versionBadge}>v1.2</div>
+        
+        {/* Theme switch */}
+        <div className={styles.themeSwitchContainer}>
+          <ThemeSwitch />
+        </div>
       </div>
     </div>
   );

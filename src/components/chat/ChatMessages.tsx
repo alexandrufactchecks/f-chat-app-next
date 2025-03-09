@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styles from './ChatMessages.module.css';
 import ReactMarkdown from 'react-markdown';
 
@@ -26,6 +26,7 @@ interface ChatMessagesProps {
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [copyStates, setCopyStates] = useState<Record<string, boolean>>({});
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -51,6 +52,49 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
       .join(' ');
   };
 
+  // Copy message text to clipboard
+  const copyToClipboard = async (text: string, messageId: string) => {
+    try {
+      // Use the Clipboard API to copy text
+      await navigator.clipboard.writeText(text);
+      
+      // Show success indicator
+      setCopyStates(prev => ({ ...prev, [messageId]: true }));
+      
+      // Hide success indicator after 2 seconds
+      setTimeout(() => {
+        setCopyStates(prev => ({ ...prev, [messageId]: false }));
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  // Extract plain text from markdown
+  const extractPlainText = (markdown: string) => {
+    // Simple regex to remove markdown formatting
+    return markdown
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Bold
+      .replace(/\*(.*?)\*/g, '$1')     // Italic
+      .replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)') // Links
+      .replace(/#{1,6}\s+(.+)/g, '$1') // Headers
+      .replace(/`{3}[\s\S]*?`{3}/g, '') // Code blocks
+      .replace(/`([^`]+)`/g, '$1')     // Inline code
+      .replace(/>\s+(.*)/g, '$1')      // Blockquotes
+      .replace(/\n\s*[-*+]\s+(.*)/g, '\n• $1'); // Lists
+  };
+
+  // Enhanced emoji mapping for headings
+  const getEmojiForHeading = (content: string) => {
+    if (content.includes('FACT')) return '📝';
+    if (content.includes('SOURCE')) return '🔎';
+    if (content.includes('EVIDENCE')) return '📊';
+    if (content.includes('CONCLUSION')) return '✅';
+    if (content.includes('ASSESSMENT')) return '🧐';
+    if (content.includes('VERDICT')) return '⚖️';
+    return '';
+  };
+
   return (
     <div className={styles.chatMessages}>
       <div className={styles.messagesContainer}>
@@ -69,7 +113,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
             <div className={styles.bubbleContainer}>
               {message.type === 'received' && (
                 <div className={styles.messageSender}>
-                  FactCheck
+                  FactCheck AI 🔍
                   {message.model && (
                     <span className={styles.modelIndicator}>
                       {formatModelName(message.model)}
@@ -85,55 +129,87 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
                 {message.type === 'sent' ? (
                   message.text
                 ) : (
-                  <div className={styles.formattedMessage}>
-                    <ReactMarkdown
-                      components={{
-                        h1: ({ node, ...props }) => <h1 className={styles.heading1} {...props} />,
-                        h2: ({ node, ...props }) => <h2 className={styles.heading2} {...props} />,
-                        h3: ({ node, children, ...props }) => {
-                          // Extract emoji from h3 headings to use as data attributes for styling
-                          const content = children?.toString() || '';
-                          // Extract the emoji + category prefix
-                          const match = content.match(/^([📝🔎📊✅🧐⚖️]\s+[A-Z]+):/);
-                          const dataContent = match ? match[1] : '';
-                          
-                          return (
-                            <h3 
-                              className={styles.heading3} 
-                              data-content={dataContent}
+                  <>
+                    <div className={styles.formattedMessage}>
+                      <ReactMarkdown
+                        components={{
+                          h1: ({ node, ...props }) => <h1 className={styles.heading1} {...props} />,
+                          h2: ({ node, ...props }) => <h2 className={styles.heading2} {...props} />,
+                          h3: ({ node, children, ...props }) => {
+                            // Extract emoji from h3 headings to use as data attributes for styling
+                            const content = children?.toString() || '';
+                            
+                            // Extract the category prefix
+                            const categoryMatch = content.match(/^([A-Z]+):/);
+                            const category = categoryMatch ? categoryMatch[1] : '';
+                            
+                            // Get emoji for this heading type
+                            const emoji = getEmojiForHeading(category);
+                            
+                            // Create data attribute for styling
+                            const dataContent = emoji ? `${emoji} ${category}` : '';
+                            
+                            // Format the heading text - remove emoji if it exists at the start
+                            let displayText = content;
+                            if (displayText.match(/^[📝🔎📊✅🧐⚖️]\s+/)) {
+                              displayText = displayText.replace(/^[📝🔎📊✅🧐⚖️]\s+/, '');
+                            }
+                            
+                            return (
+                              <h3 
+                                className={styles.heading3} 
+                                data-content={dataContent}
+                                {...props}
+                              >
+                                {emoji && <span>{emoji}</span>}
+                                {displayText}
+                              </h3>
+                            );
+                          },
+                          p: ({ node, ...props }) => <p className={styles.paragraph} {...props} />,
+                          ul: ({ node, ...props }) => <ul className={styles.unorderedList} {...props} />,
+                          ol: ({ node, ...props }) => <ol className={styles.orderedList} {...props} />,
+                          li: ({ node, ...props }) => <li className={styles.listItem} {...props} />,
+                          code: ({ node, inline, ...props }: CodeComponentProps) => 
+                            inline ? 
+                              <code className={styles.inlineCode} {...props} /> : 
+                              <div className={styles.codeBlock}><code {...props} /></div>,
+                          pre: ({ node, ...props }) => <pre className={styles.codeBlockContainer} {...props} />,
+                          hr: ({ node, ...props }) => <hr className={styles.divider} {...props} />,
+                          blockquote: ({ node, ...props }) => <blockquote className={styles.blockquote} {...props} />,
+                          strong: ({ node, ...props }) => <strong className={styles.emphasis} {...props} />,
+                          a: ({ node, href, children, ...props }) => (
+                            <a 
+                              href={href} 
+                              className={styles.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               {...props}
-                            />
-                          );
-                        },
-                        p: ({ node, ...props }) => <p className={styles.paragraph} {...props} />,
-                        ul: ({ node, ...props }) => <ul className={styles.unorderedList} {...props} />,
-                        ol: ({ node, ...props }) => <ol className={styles.orderedList} {...props} />,
-                        li: ({ node, ...props }) => <li className={styles.listItem} {...props} />,
-                        code: ({ node, inline, ...props }: CodeComponentProps) => 
-                          inline ? 
-                            <code className={styles.inlineCode} {...props} /> : 
-                            <div className={styles.codeBlock}><code {...props} /></div>,
-                        pre: ({ node, ...props }) => <pre className={styles.codeBlockContainer} {...props} />,
-                        hr: ({ node, ...props }) => <hr className={styles.divider} {...props} />,
-                        blockquote: ({ node, ...props }) => <blockquote className={styles.blockquote} {...props} />,
-                        strong: ({ node, ...props }) => <strong className={styles.emphasis} {...props} />,
-                        a: ({ node, href, children, ...props }) => (
-                          <a 
-                            href={href} 
-                            className={styles.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            {...props}
-                          >
-                            {children}
-                            <span className={styles.linkIcon}>↗</span>
-                          </a>
-                        ),
-                      }}
+                            >
+                              {children}
+                              <span className={styles.linkIcon}>↗</span>
+                            </a>
+                          ),
+                        }}
+                      >
+                        {message.text}
+                      </ReactMarkdown>
+                    </div>
+                    <button 
+                      className={styles.copyButton}
+                      onClick={() => copyToClipboard(extractPlainText(message.text), message.id)}
+                      aria-label="Copy message"
+                      title="Copy to clipboard"
                     >
-                      {message.text}
-                    </ReactMarkdown>
-                  </div>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                    </button>
+                    <div className={`${styles.copySuccess} ${copyStates[message.id] ? styles.visible : ''}`}>
+                      Copied! 👍
+                    </div>
+                  </>
                 )}
               </div>
               <div className={styles.messageTime}>{formatTime()}</div>
@@ -147,7 +223,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
               <span className={styles.mirroredF}>F</span>
             </div>
             <div className={styles.bubbleContainer}>
-              <div className={styles.messageSender}>FactCheck</div>
+              <div className={styles.messageSender}>FactCheck AI 🔍</div>
               <div className={styles.loading}>
                 <div className={styles.loadingDots}>
                   <span></span>

@@ -6,9 +6,14 @@ import styles from './ChatInput.module.css';
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ 
+  onSendMessage, 
+  disabled = false,
+  placeholder = "Type your message..." 
+}) => {
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -56,6 +61,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
     }
   };
 
+  // Ensure we're using CSS module classes correctly without exposing them
   return (
     <div className={styles.chatInputContainer}>
       <form onSubmit={handleSubmit} className={styles.chatInputWrapper}>
@@ -63,12 +69,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           ref={inputRef}
           rows={1}
           className={styles.messageInput}
-          placeholder="Type your message..."
+          placeholder={placeholder}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           autoComplete="off"
+          aria-label="Message input"
         />
         <button 
           type="submit" 

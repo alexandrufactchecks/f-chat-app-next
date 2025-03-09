@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import AnimatedBackground from './AnimatedBackground';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
@@ -15,31 +14,47 @@ interface Message {
   model?: string; // Optional model information
 }
 
+interface ExamplePrompt {
+  title: string;
+  prompt: string;
+}
+
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentModel, setCurrentModel] = useState<string>('deepseek-reasoner');
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  // Example prompts for users to try
+  const examplePrompts: ExamplePrompt[] = [
+    {
+      title: "Fact-check a claim",
+      prompt: "Is it true that drinking lemon water every morning boosts your immune system?"
+    },
+    {
+      title: "Analyze a news headline",
+      prompt: "Can you analyze this headline: 'Scientists discover new planet that could support life'"
+    },
+    {
+      title: "Verify a statistic",
+      prompt: "Is it accurate that electric cars produce 50% less emissions than gas cars?"
+    },
+    {
+      title: "Explain a complex topic",
+      prompt: "What is quantum computing and how does it differ from classical computing?"
+    }
+  ];
 
   useEffect(() => {
     console.log('Chat component mounted');
     
-    // Show welcome message after a delay
+    // Show welcome screen
     const timer = setTimeout(() => {
       console.log('Setting chat to visible');
       setIsVisible(true);
-      
-      // Add welcome message
-      setMessages([
-        {
-          id: uuidv4(),
-          text: 'Welcome to FactCheck! I\'m your AI fact-checking assistant powered by DeepSeek Reasoner. Ask me anything, and I\'ll help verify information or answer your questions with reliable sources.',
-          type: 'received',
-          model: 'deepseek-reasoner',
-        },
-      ]);
-    }, 800);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, []);
@@ -47,6 +62,11 @@ const Chat: React.FC = () => {
   const handleSendMessage = async (text: string) => {
     console.log('Sending message:', text);
     setError(null);
+    
+    // Hide welcome screen on first message
+    if (showWelcome) {
+      setShowWelcome(false);
+    }
     
     // Add user message
     const userMessage: Message = {
@@ -108,14 +128,53 @@ const Chat: React.FC = () => {
     }
   };
 
+  const handleExampleClick = (prompt: string) => {
+    handleSendMessage(prompt);
+  };
+
   return (
     <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''} animate-fade-in`}>
-      <AnimatedBackground />
       <div className={styles.chatMain}>
         <ChatHeader model={currentModel} />
         <div className={styles.chatContent}>
-          <ChatMessages messages={messages} isLoading={isLoading} />
-          <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
+          {showWelcome ? (
+            <div className={styles.welcomeContainer}>
+              <div className={styles.welcomeContent}>
+                <div className={styles.welcomeHeader}>
+                  <div className={styles.welcomeIcon}>
+                    <span className={styles.mirroredF}>F</span>
+                  </div>
+                  <h1 className={styles.welcomeTitle}>Welcome to FactCheck</h1>
+                </div>
+                <p className={styles.welcomeSubtitle}>
+                  I can help you verify information, analyze claims, and provide evidence-based answers.
+                </p>
+                
+                <div className={styles.examplesContainer}>
+                  <h2 className={styles.examplesTitle}>Try asking about:</h2>
+                  <div className={styles.examplePrompts}>
+                    {examplePrompts.map((example, index) => (
+                      <div 
+                        key={index} 
+                        className={styles.examplePrompt}
+                        onClick={() => handleExampleClick(example.prompt)}
+                      >
+                        <span className={styles.exampleTitle}>{example.title}</span>
+                        <span className={styles.exampleText}>{example.prompt}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <ChatMessages messages={messages} isLoading={isLoading} />
+          )}
+          <ChatInput 
+            onSendMessage={handleSendMessage} 
+            disabled={isLoading} 
+            placeholder={showWelcome ? "Ask me anything..." : "Type your message..."}
+          />
         </div>
       </div>
     </div>
