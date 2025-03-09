@@ -4,6 +4,14 @@ import React, { useRef, useEffect } from 'react';
 import styles from './ChatMessages.module.css';
 import ReactMarkdown from 'react-markdown';
 
+// Define a custom interface for the code component props
+interface CodeComponentProps {
+  node?: any;
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
+
 interface Message {
   id: string;
   text: string;
@@ -88,7 +96,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
                         ul: ({ node, ...props }) => <ul className={styles.unorderedList} {...props} />,
                         ol: ({ node, ...props }) => <ol className={styles.orderedList} {...props} />,
                         li: ({ node, ...props }) => <li className={styles.listItem} {...props} />,
-                        code: ({ node, inline, ...props }) => 
+                        code: ({ node, inline, ...props }: CodeComponentProps) => 
                           inline ? 
                             <code className={styles.inlineCode} {...props} /> : 
                             <div className={styles.codeBlock}><code {...props} /></div>,
