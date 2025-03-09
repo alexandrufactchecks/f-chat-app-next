@@ -16,6 +16,7 @@ interface Message {
   id: string;
   text: string;
   type: 'sent' | 'received';
+  model?: string; // Optional model information
 }
 
 interface ChatMessagesProps {
@@ -39,6 +40,17 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
     return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  // Format model name for display
+  const formatModelName = (modelName?: string) => {
+    if (!modelName) return '';
+    
+    return modelName
+      .replace('deepseek-', '')
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   return (
     <div className={styles.chatMessages}>
       <div className={styles.messagesContainer}>
@@ -56,7 +68,14 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
             )}
             <div className={styles.bubbleContainer}>
               {message.type === 'received' && (
-                <div className={styles.messageSender}>FactCheck</div>
+                <div className={styles.messageSender}>
+                  FactCheck
+                  {message.model && (
+                    <span className={styles.modelIndicator}>
+                      {formatModelName(message.model)}
+                    </span>
+                  )}
+                </div>
               )}
               <div
                 className={`${styles.message} ${

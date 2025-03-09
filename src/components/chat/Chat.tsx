@@ -12,6 +12,7 @@ interface Message {
   id: string;
   text: string;
   type: 'sent' | 'received';
+  model?: string; // Optional model information
 }
 
 const Chat: React.FC = () => {
@@ -19,6 +20,7 @@ const Chat: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentModel, setCurrentModel] = useState<string>('deepseek-reasoner');
 
   useEffect(() => {
     console.log('Chat component mounted');
@@ -32,8 +34,9 @@ const Chat: React.FC = () => {
       setMessages([
         {
           id: uuidv4(),
-          text: 'Welcome to FactCheck! I\'m your AI fact-checking assistant. Ask me anything, and I\'ll help verify information or answer your questions with reliable sources.',
+          text: 'Welcome to FactCheck! I\'m your AI fact-checking assistant powered by DeepSeek Reasoner. Ask me anything, and I\'ll help verify information or answer your questions with reliable sources.',
           type: 'received',
+          model: 'deepseek-reasoner',
         },
       ]);
     }, 800);
@@ -74,11 +77,17 @@ const Chat: React.FC = () => {
         throw new Error(data.error || 'Failed to get a response');
       }
       
+      // Update current model if provided in the response
+      if (data.model) {
+        setCurrentModel(data.model);
+      }
+      
       // Add AI response to the chat
       const botMessage: Message = {
         id: uuidv4(),
         text: data.text,
         type: 'received',
+        model: data.model || currentModel,
       };
       
       setMessages((prevMessages) => [...prevMessages, botMessage]);
@@ -103,7 +112,7 @@ const Chat: React.FC = () => {
     <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''} animate-fade-in`}>
       <AnimatedBackground />
       <div className={styles.chatMain}>
-        <ChatHeader />
+        <ChatHeader model={currentModel} />
         <div className={styles.chatContent}>
           <ChatMessages messages={messages} isLoading={isLoading} />
           <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />

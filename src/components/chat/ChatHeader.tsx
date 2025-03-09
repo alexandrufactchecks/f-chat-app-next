@@ -4,7 +4,20 @@ import React from 'react';
 import ThemeSwitch from '../theme/ThemeSwitch';
 import styles from './ChatHeader.module.css';
 
-const ChatHeader: React.FC = () => {
+interface ChatHeaderProps {
+  model?: string;
+}
+
+const ChatHeader: React.FC<ChatHeaderProps> = ({ model = 'deepseek-reasoner' }) => {
+  // Format model name for display
+  const formatModelName = (modelName: string) => {
+    return modelName
+      .replace('deepseek-', '')
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   return (
     <div className={`${styles.chatHeader} glass-effect`}>
       <div className={styles.headerLeft}>
@@ -27,7 +40,12 @@ const ChatHeader: React.FC = () => {
           <ThemeSwitch />
         </div>
         
-        {/* Updated version indicator */}
+        {/* Model indicator */}
+        <div className={styles.modelBadge}>
+          {formatModelName(model)}
+        </div>
+        
+        {/* Version indicator */}
         <div className={styles.versionBadge}>v1.1</div>
       </div>
     </div>

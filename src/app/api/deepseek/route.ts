@@ -86,6 +86,22 @@ function formatResponseText(text: string): string {
   return formattedText;
 }
 
+// Create a system prompt for fact-checking
+const getSystemPrompt = () => {
+  return `You are an expert fact-checker for FactCheck. Your role is to analyze claims, verify information, and provide evidence-based assessments. Follow these guidelines:
+
+1. Analyze the claim or question thoroughly
+2. Research and verify facts using reliable sources
+3. Present evidence clearly and objectively
+4. Provide a verdict on the accuracy of claims (True, False, Mostly True, Mostly False, Misleading, etc.)
+5. Structure your response with clear sections: Facts, Sources, Evidence, and Conclusion
+6. Always cite sources when providing information
+7. Avoid political bias and maintain neutrality
+8. Be thorough but concise in your explanations
+
+Your goal is to help users distinguish fact from fiction with well-reasoned, evidence-based analysis.`;
+};
+
 export async function POST(request: NextRequest) {
   try {
     // Check if API key is available
@@ -109,21 +125,25 @@ export async function POST(request: NextRequest) {
 
     // Prepare data for DeepSeek API
     const deepseekRequestData = {
-      model: 'deepseek-chat', // Use the appropriate model
+      model: 'deepseek-reasoner', // Updated to use the reasoner model
       messages: [
+        {
+          role: 'system',
+          content: getSystemPrompt(),
+        },
         {
           role: 'user',
           content: requestData.message,
         },
       ],
-      max_tokens: 500,
-      temperature: 0.7,
+      max_tokens: 800, // Increased token limit for more detailed responses
+      temperature: 0.3, // Lower temperature for more factual responses
     };
     
     // Log request (for debugging)
     console.log('Sending request to DeepSeek API:', {
       url: DEEPSEEK_API_URL,
-      data: deepseekRequestData,
+      model: deepseekRequestData.model,
     });
 
     // Call DeepSeek API
@@ -160,7 +180,7 @@ export async function POST(request: NextRequest) {
     // Return successful response
     return NextResponse.json({
       text: assistantMessage,
-      // Additional metadata can be added here if needed
+      model: deepseekRequestData.model,
     });
     
   } catch (error: any) {
