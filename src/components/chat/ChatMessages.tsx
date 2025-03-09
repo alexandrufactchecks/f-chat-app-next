@@ -117,6 +117,18 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
                         hr: ({ node, ...props }) => <hr className={styles.divider} {...props} />,
                         blockquote: ({ node, ...props }) => <blockquote className={styles.blockquote} {...props} />,
                         strong: ({ node, ...props }) => <strong className={styles.emphasis} {...props} />,
+                        a: ({ node, href, children, ...props }) => (
+                          <a 
+                            href={href} 
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            {...props}
+                          >
+                            {children}
+                            <span className={styles.linkIcon}>↗</span>
+                          </a>
+                        ),
                       }}
                     >
                       {message.text}
