@@ -1,7 +1,9 @@
 .chatScreen {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -12,16 +14,100 @@
   color: var(--text-color);
   overflow: hidden;
   z-index: 1; /* Ensure it's above other elements */
+  background: linear-gradient(145deg, var(--bg-gradient-1), var(--bg-gradient-2));
+}
+
+.brandStrip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), var(--header-bg));
+  z-index: 20;
+}
+
+.chatMain {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+  justify-content: space-between;
 }
 
 .visible {
   visibility: visible !important;
   opacity: 1 !important;
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Media queries for different devices */
+@media screen and (min-width: 1024px) {
+  .chatScreen {
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    max-width: 1200px;
+  }
+}
+
+/* Tablet devices */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .chatScreen {
+    width: 92%;
+    height: 92%;
+    top: 4%;
+    left: 4%;
+  }
+}
+
+/* Mobile layout adjustments */
+@media screen and (max-width: 767px) {
+  .chatContent {
+    padding: 0 8px;
+    max-width: 100%;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+  .chatContent {
+    padding: 0 4px;
+  }
 }
 
 /* Fix for iOS keyboard pushing content up */
 @media screen and (max-height: 450px) {
   .chatScreen {
+    position: absolute;
     height: auto;
     min-height: 100%;
   }

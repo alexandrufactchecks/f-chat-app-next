@@ -32,11 +32,11 @@ const Chat: React.FC = () => {
       setMessages([
         {
           id: uuidv4(),
-          text: 'Welcome to factchecks.eu! Ask me anything for a fact check.',
+          text: 'Welcome to FactChecks.eu! I\'m your AI fact-checking assistant. Ask me anything, and I\'ll help verify information or answer your questions with reliable sources.',
           type: 'received',
         },
       ]);
-    }, 2000);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);
@@ -89,7 +89,7 @@ const Chat: React.FC = () => {
       // Add error message to chat
       const errorMessage: Message = {
         id: uuidv4(),
-        text: `Error: ${err.message || 'Failed to get a response. Please try again.'}`,
+        text: `Sorry, I encountered an error: ${err.message || 'Failed to get a response. Please try again.'}`,
         type: 'received',
       };
       
@@ -99,15 +99,16 @@ const Chat: React.FC = () => {
     }
   };
 
-  console.log('Rendering Chat component, isVisible:', isVisible);
-  console.log('Current messages:', messages);
-
   return (
     <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''}`}>
       <AnimatedBackground />
-      <ChatHeader />
-      <ChatMessages messages={messages} isLoading={isLoading} />
-      <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
+      <div className={styles.chatMain}>
+        <ChatHeader />
+        <div className={styles.chatContent}>
+          <ChatMessages messages={messages} isLoading={isLoading} />
+          <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
+        </div>
+      </div>
     </div>
   );
 };

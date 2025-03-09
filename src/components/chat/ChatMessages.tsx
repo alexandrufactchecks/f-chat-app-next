@@ -25,29 +25,60 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
     scrollToBottom();
   }, [messages]);
 
+  const formatTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
   return (
     <div className={styles.chatMessages}>
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`${styles.message} ${
-            message.type === 'sent' ? styles.sent : styles.received
-          }`}
-        >
-          {message.text}
-        </div>
-      ))}
-      
-      {isLoading && (
-        <div className={`${styles.message} ${styles.received} ${styles.loading}`}>
-          <div className={styles.loadingDots}>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className={styles.messagesContainer}>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`${styles.messageWrapper} ${
+              message.type === 'sent' ? styles.sentWrapper : styles.receivedWrapper
+            }`}
+          >
+            {message.type === 'received' && (
+              <div className={styles.avatar}>
+                <span>F</span>
+              </div>
+            )}
+            <div className={styles.bubbleContainer}>
+              {message.type === 'received' && (
+                <div className={styles.messageSender}>FactChecks.eu</div>
+              )}
+              <div
+                className={`${styles.message} ${
+                  message.type === 'sent' ? styles.sent : styles.received
+                }`}
+              >
+                {message.text}
+              </div>
+              <div className={styles.messageTime}>{formatTime()}</div>
+            </div>
           </div>
-        </div>
-      )}
-      
+        ))}
+        
+        {isLoading && (
+          <div className={`${styles.messageWrapper} ${styles.receivedWrapper}`}>
+            <div className={styles.avatar}>
+              <span>F</span>
+            </div>
+            <div className={styles.bubbleContainer}>
+              <div className={styles.messageSender}>FactChecks.eu</div>
+              <div className={styles.loading}>
+                <div className={styles.loadingDots}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
       <div ref={messagesEndRef} />
     </div>
   );

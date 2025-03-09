@@ -10,7 +10,7 @@ interface ChatInputProps {
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }) => {
   const [message, setMessage] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +19,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
       setMessage('');
     }
   };
+
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = inputRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+    }
+  }, [message]);
 
   // Focus input on iOS when keyboard appears
   useEffect(() => {
@@ -40,19 +49,26 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
     }
   }, []);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as unknown as React.FormEvent);
+    }
+  };
+
   return (
     <div className={styles.chatInputContainer}>
       <form onSubmit={handleSubmit} className={styles.chatInputWrapper}>
-        <input
+        <textarea
           ref={inputRef}
-          type="text"
-          id="message-input"
+          rows={1}
           className={styles.messageInput}
-          placeholder="Type a message..."
+          placeholder="Type your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          autoComplete="off"
+          onKeyDown={handleKeyDown}
           disabled={disabled}
+          autoComplete="off"
         />
         <button 
           type="submit" 
