@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+  <style>
+    .building {
+      fill: #004AAD;
+    }
+    .building-dark {
+      fill: #003580;
+    }
+    .building-light {
+      fill: #0056c7;
+    }
+    .window {
+      fill: rgba(255, 255, 255, 0.5);
+    }
+    .window-lit {
+      fill: rgba(255, 255, 200, 0.8);
+    }
+    .antenna {
+      stroke: #002a66;
+      stroke-width: 1;
+      fill: none;
+    }
+    .roof {
+      fill: #002a66;
+    }
+  </style>
+  
+  <!-- Background Buildings -->
+  <rect class="building-dark" x="0" y="150" width="40" height="150"/>
+  <rect class="building" x="50" y="100" width="30" height="200"/>
+  <rect class="building-light" x="90" y="180" width="50" height="120"/>
+  <rect class="building-dark" x="150" y="80" width="20" height="220"/>
+  <rect class="building" x="180" y="130" width="60" height="170"/>
+  
+  <!-- Skyscraper with details -->
+  <rect class="building-dark" x="250" y="50" width="30" height="250"/>
+  <rect class="roof" x="255" y="40" width="20" height="10"/>
+  <line class="antenna" x1="265" y1="40" x2="265" y2="20"/>
+  
+  <!-- More buildings -->
+  <rect class="building-light" x="290" y="150" width="40" height="150"/>
+  <rect class="building" x="340" y="100" width="20" height="200"/>
+  
+  <!-- Tall building with setbacks -->
+  <rect class="building-dark" x="370" y="70" width="50" height="230"/>
+  <rect class="building" x="380" y="50" width="30" height="20"/>
+  <rect class="building-light" x="385" y="30" width="20" height="20"/>
+  <rect class="roof" x="390" y="20" width="10" height="10"/>
+  
+  <!-- More buildings -->
+  <rect class="building" x="430" y="120" width="30" height="180"/>
+  <rect class="building-light" x="470" y="90" width="40" height="210"/>
+  <rect class="building-dark" x="520" y="150" width="60" height="150"/>
+  <rect class="building" x="590" y="60" width="25" height="240"/>
+  
+  <!-- Modern skyscraper -->
+  <rect class="building-light" x="625" y="110" width="45" height="190"/>
+  <polygon class="roof" points="647.5,90 660,110 635,110"/>
+  
+  <!-- More buildings -->
+  <rect class="building" x="680" y="140" width="30" height="160"/>
+  <rect class="building-dark" x="720" y="80" width="50" height="220"/>
+  <rect class="building-light" x="780" y="130" width="35" height="170"/>
+  <rect class="building" x="825" y="100" width="25" height="200"/>
+  
+  <!-- Distinctive tall building -->
+  <rect class="building-dark" x="860" y="70" width="40" height="230"/>
+  <rect class="building-light" x="870" y="40" width="20" height="30"/>
+  <line class="antenna" x1="880" y1="40" x2="880" y2="15"/>
+  
+  <!-- Final buildings -->
+  <rect class="building" x="910" y="120" width="55" height="180"/>
+  <rect class="building-light" x="975" y="90" width="25" height="210"/>
+  
+  <!-- Windows (more detailed) -->
+  <g class="windows">
+    <!-- Building 1 -->
+    <rect class="window" x="10" y="170" width="5" height="10"/>
+    <rect class="window-lit" x="25" y="170" width="5" height="10"/>
+    <rect class="window" x="10" y="190" width="5" height="10"/>
+    <rect class="window-lit" x="25" y="190" width="5" height="10"/>
+    <rect class="window" x="10" y="210" width="5" height="10"/>
+    <rect class="window" x="25" y="210" width="5" height="10"/>
+    <rect class="window-lit" x="10" y="230" width="5" height="10"/>
+    <rect class="window" x="25" y="230" width="5" height="10"/>
+    
+    <!-- Building 2 -->
+    <rect class="window" x="60" y="120" width="5" height="10"/>
+    <rect class="window" x="60" y="140" width="5" height="10"/>
+    <rect class="window-lit" x="60" y="160" width="5" height="10"/>
+    <rect class="window" x="60" y="180" width="5" height="10"/>
+    <rect class="window-lit" x="60" y="200" width="5" height="10"/>
+    <rect class="window" x="60" y="220" width="5" height="10"/>
+    <rect class="window" x="70" y="130" width="5" height="10"/>
+    <rect class="window-lit" x="70" y="150" width="5" height="10"/>
+    <rect class="window" x="70" y="170" width="5" height="10"/>
+    <rect class="window" x="70" y="190" width="5" height="10"/>
+    <rect class="window-lit" x="70" y="210" width="5" height="10"/>
+    <rect class="window" x="70" y="230" width="5" height="10"/>
+    
+    <!-- Skyscraper windows -->
+    <rect class="window" x="255" y="70" width="8" height="8"/>
+    <rect class="window-lit" x="267" y="70" width="8" height="8"/>
+    <rect class="window" x="255" y="90" width="8" height="8"/>
+    <rect class="window" x="267" y="90" width="8" height="8"/>
+    <rect class="window-lit" x="255" y="110" width="8" height="8"/>
+    <rect class="window" x="267" y="110" width="8" height="8"/>
+    <rect class="window" x="255" y="130" width="8" height="8"/>
+    <rect class="window-lit" x="267" y="130" width="8" height="8"/>
+    <rect class="window" x="255" y="150" width="8" height="8"/>
+    <rect class="window" x="267" y="150" width="8" height="8"/>
+    <rect class="window-lit" x="255" y="170" width="8" height="8"/>
+    <rect class="window" x="267" y="170" width="8" height="8"/>
+    <rect class="window" x="255" y="190" width="8" height="8"/>
+    <rect class="window-lit" x="267" y="190" width="8" height="8"/>
+    <rect class="window" x="255" y="210" width="8" height="8"/>
+    <rect class="window" x="267" y="210" width="8" height="8"/>
+    <rect class="window-lit" x="255" y="230" width="8" height="8"/>
+    <rect class="window" x="267" y="230" width="8" height="8"/>
+    <rect class="window" x="255" y="250" width="8" height="8"/>
+    <rect class="window-lit" x="267" y="250" width="8" height="8"/>
+    <rect class="window" x="255" y="270" width="8" height="8"/>
+    <rect class="window" x="267" y="270" width="8" height="8"/>
+    
+    <!-- Modern skyscraper windows -->
+    <rect class="window" x="635" y="130" width="10" height="10"/>
+    <rect class="window-lit" x="650" y="130" width="10" height="10"/>
+    <rect class="window" x="635" y="150" width="10" height="10"/>
+    <rect class="window" x="650" y="150" width="10" height="10"/>
+    <rect class="window-lit" x="635" y="170" width="10" height="10"/>
+    <rect class="window" x="650" y="170" width="10" height="10"/>
+    <rect class="window" x="635" y="190" width="10" height="10"/>
+    <rect class="window-lit" x="650" y="190" width="10" height="10"/>
+    <rect class="window" x="635" y="210" width="10" height="10"/>
+    <rect class="window" x="650" y="210" width="10" height="10"/>
+    <rect class="window-lit" x="635" y="230" width="10" height="10"/>
+    <rect class="window" x="650" y="230" width="10" height="10"/>
+    <rect class="window" x="635" y="250" width="10" height="10"/>
+    <rect class="window-lit" x="650" y="250" width="10" height="10"/>
+    <rect class="window" x="635" y="270" width="10" height="10"/>
+    <rect class="window" x="650" y="270" width="10" height="10"/>
+  </g>
+</svg> 

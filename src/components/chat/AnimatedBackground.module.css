@@ -1,0 +1,230 @@
+/* Animated City Background */
+.cityBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #000428, #004e92);
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Far buildings (slowest movement) */
+.citySkyline {
+  position: absolute;
+  bottom: -5%;
+  width: 300%;
+  height: 60%;
+  background-image: url('/images/city-skyline.svg');
+  background-repeat: repeat-x;
+  background-size: 33.33% 100%;
+  filter: brightness(0.3) saturate(0.8);
+  animation: moveSkyline 180s linear infinite;
+  opacity: 0.9;
+  transform: translateZ(-200px) scale(1.2);
+}
+
+/* Mid-distance buildings */
+.citySkylineFront {
+  position: absolute;
+  bottom: -2%;
+  width: 300%;
+  height: 45%;
+  background-image: url('/images/city-skyline.svg');
+  background-repeat: repeat-x;
+  background-size: 33.33% 100%;
+  filter: brightness(0.5) saturate(1);
+  animation: moveSkylineFast 90s linear infinite;
+  opacity: 0.95;
+  transform: translateZ(-100px) scale(1.1);
+}
+
+/* Closest buildings */
+.citySkylineClosest {
+  position: absolute;
+  bottom: 0;
+  width: 300%;
+  height: 35%;
+  background-image: url('/images/city-skyline.svg');
+  background-repeat: repeat-x;
+  background-size: 33.33% 100%;
+  filter: brightness(0.7) saturate(1.2);
+  animation: moveSkylineClosest 60s linear infinite;
+  opacity: 1;
+  transform: translateZ(0) scale(1);
+}
+
+/* City lights effect */
+.cityLights {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 100%;
+  background-image: 
+      radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 1px, transparent 1.5px),
+      radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 2px, transparent 3px);
+  background-size: 30px 30px, 50px 50px;
+  filter: blur(0.5px);
+  opacity: 0.7;
+  animation: moveLights 40s linear infinite;
+  transform: translateZ(50px);
+  pointer-events: none;
+}
+
+/* Stars in the sky */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background-image: 
+      radial-gradient(circle at center, white 1px, transparent 1px),
+      radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0.5px, transparent 0.5px);
+  background-size: 200px 200px, 100px 100px;
+  opacity: 0.7;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  transform: translateZ(-300px);
+}
+
+/* Fog effect */
+.fog {
+  position: absolute;
+  bottom: 0;
+  width: 300%;
+  height: 30%;
+  background: linear-gradient(to top, 
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 100%);
+  filter: blur(3px);
+  animation: moveFog 30s linear infinite;
+  transform: translateZ(100px);
+  pointer-events: none;
+}
+
+/* Main overlay - reduced blur for more clarity */
+.blurOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .cityBackground {
+  background: linear-gradient(to bottom, #1e3c72, #2a5298);
+}
+
+[data-theme="light"] .citySkyline,
+[data-theme="light"] .citySkylineFront,
+[data-theme="light"] .citySkylineClosest {
+  filter: brightness(0.6) saturate(1.1);
+}
+
+[data-theme="light"] .blurOverlay {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="light"] .stars {
+  opacity: 0.3;
+}
+
+/* Animations */
+@keyframes moveSkyline {
+  0% {
+      transform: translateZ(-200px) scale(1.2) translateX(0);
+  }
+  100% {
+      transform: translateZ(-200px) scale(1.2) translateX(-33.33%);
+  }
+}
+
+@keyframes moveSkylineFast {
+  0% {
+      transform: translateZ(-100px) scale(1.1) translateX(0);
+  }
+  100% {
+      transform: translateZ(-100px) scale(1.1) translateX(-33.33%);
+  }
+}
+
+@keyframes moveSkylineClosest {
+  0% {
+      transform: translateZ(0) scale(1) translateX(0);
+  }
+  100% {
+      transform: translateZ(0) scale(1) translateX(-33.33%);
+  }
+}
+
+@keyframes moveLights {
+  0% {
+      transform: translateZ(50px) translateX(0);
+  }
+  100% {
+      transform: translateZ(50px) translateX(-50%);
+  }
+}
+
+@keyframes twinkle {
+  0% {
+      opacity: 0.7;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+@keyframes moveFog {
+  0% {
+      transform: translateZ(100px) translateX(0);
+  }
+  100% {
+      transform: translateZ(100px) translateX(-33.33%);
+  }
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 768px) {
+  .cityBackground {
+      perspective: 600px;
+  }
+  
+  .fog {
+      opacity: 0.7;
+  }
+  
+  .blurOverlay {
+      backdrop-filter: blur(1px);
+  }
+}
+
+/* Small devices and low-performance devices */
+@media screen and (max-width: 375px) {
+  .stars {
+      display: none;
+  }
+  
+  .citySkyline {
+      height: 50%;
+  }
+  
+  .citySkylineFront {
+      height: 40%;
+  }
+  
+  .citySkylineClosest {
+      height: 30%;
+  }
+  
+  .cityLights {
+      opacity: 0.5;
+  }
+} 

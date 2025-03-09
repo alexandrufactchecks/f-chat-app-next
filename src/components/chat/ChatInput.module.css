@@ -1,0 +1,129 @@
+.chatInputContainer {
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 20;
+  flex-shrink: 0;
+  width: 100%;
+  bottom: 0;
+}
+
+[data-theme="light"] .chatInputContainer {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.chatInputWrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--input-bg);
+  border-radius: 24px;
+  padding: 5px 15px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.chatInputWrapper:focus-within {
+  box-shadow: 0 0 0 2px var(--header-bg);
+}
+
+.messageInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 5px;
+  font-size: 16px;
+  color: var(--text-color);
+  outline: none;
+  width: 100%;
+}
+
+.sendButton {
+  background: var(--header-bg);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.sendButton:hover {
+  background-color: #0056c7;
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sendButton svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+  .chatInputContainer {
+    padding: 10px;
+    min-height: 60px;
+    box-sizing: border-box;
+  }
+  
+  .messageInput {
+    font-size: 14px;
+  }
+  
+  .sendButton {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .sendButton svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .chatInputContainer {
+    padding: 8px;
+    min-height: 50px;
+    box-sizing: border-box;
+  }
+  
+  .chatInputWrapper {
+    padding: 3px 10px;
+  }
+  
+  .messageInput {
+    padding: 8px 3px;
+    font-size: 13px;
+  }
+  
+  .sendButton {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .sendButton svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Fix for iPhone X and newer with notches */
+@supports (padding: max(0px)) {
+  .chatInputContainer {
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+  }
+} 

@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme Variables */
+:root {
+  /* Dark Theme (Default) */
+  --bg-color: #000000;
+  --header-bg: #004AAD;
+  --input-bg: #1a1a1a;
+  --container-bg: #111111;
+  --text-color: #ffffff;
+  --sent-message-bg: #333333;
+  --received-message-bg: #004AAD;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --header-bg: #004AAD;
+  --input-bg: #f5f5f5;
+  --container-bg: #f0f0f0;
+  --text-color: #333333;
+  --sent-message-bg: #e3e3e3;
+  --received-message-bg: #004AAD;
+}
+
+/* Base Styles */
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  -webkit-text-size-adjust: 100%; /* Prevent iOS font size adjustment */
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS devices */
+  body {
+    /* Prevent scrolling on iOS */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+}

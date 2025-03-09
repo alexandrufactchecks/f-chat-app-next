@@ -1,0 +1,73 @@
+.chatMessages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  padding-bottom: 20px; /* Extra padding at bottom to ensure messages aren't hidden behind input */
+}
+
+.message {
+  margin-bottom: 15px;
+  max-width: 80%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  line-height: 1.4;
+  animation: fadeIn 0.3s ease;
+  color: var(--text-color);
+  position: relative;
+  z-index: 1;
+  word-wrap: break-word; /* Ensure long words don't overflow */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.received {
+  background-color: var(--received-message-bg);
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+  margin-right: auto;
+  color: white;
+  float: left;
+  clear: both;
+}
+
+.sent {
+  background-color: var(--sent-message-bg);
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+  margin-left: auto;
+  text-align: right;
+  float: right;
+  clear: both;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+  .chatMessages {
+    padding: 10px;
+  }
+  
+  .message {
+    max-width: 85%;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .chatMessages {
+    padding: 8px;
+  }
+  
+  .message {
+    max-width: 90%;
+    padding: 6px 10px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+} 
