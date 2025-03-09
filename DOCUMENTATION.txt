@@ -110,6 +110,7 @@ and a clean, interactive user experience.
 - CSS Modules: Component-scoped styling
 - UUID: Unique ID generation
 - DeepSeek API: AI-powered conversation
+- ReactMarkdown: Markdown rendering for formatted responses
 
 === DEEPSEEK API INTEGRATION ===
 
@@ -144,6 +145,81 @@ The application integrates with DeepSeek AI through a secure server-side API rou
    - Run `npm run dev` to start the development server
    - Access the application at http://localhost:3000
 
+=== UI AND LAYOUT ENHANCEMENTS ===
+
+Recent improvements to the UI and layout have been implemented to enhance user experience:
+
+1. Responsive Design Enhancements
+   - Improved adaptive layout for diverse screen sizes (desktop, tablet, mobile)
+   - Added specific breakpoints for large screens (1024px+), tablets (768-1023px), 
+     mobile (480-767px), and small mobile devices (<480px)
+   - Implemented iOS-specific fixes for keyboard behavior and notch compatibility
+   - Added safe-area-inset support for modern iOS devices with notches
+
+2. Visual Improvements
+   - Enhanced message bubbles with subtle hover effects
+   - Improved shadow effects for depth and visual hierarchy
+   - Added backdrop blur effects for modern glass-like UI
+   - Refined spacing and padding for better readability
+   - Optimized animations for smoother transitions
+
+3. Chat Components Optimization
+   - ChatInput: Improved focus states and visual feedback
+   - ChatMessages: Enhanced message container sizing and alignment
+   - ChatHeader: Better positioning and responsiveness
+   - AnimatedBackground: Performance optimizations
+
+4. Accessibility Improvements
+   - Increased touch target sizes on mobile
+   - Improved color contrast for better readability
+   - Enhanced keyboard navigation support
+
+These improvements ensure a consistent and polished user experience across all devices,
+with special attention to mobile responsiveness and modern design aesthetics.
+
+=== RESPONSE FORMATTING ENHANCEMENTS ===
+
+Recent improvements have been made to enhance the readability of AI responses:
+
+1. Markdown Rendering Support
+   - Added ReactMarkdown for rich text formatting
+   - Implemented styled components for various markdown elements
+   - Enhanced message bubbles to support structured content
+
+2. Text Formatting Improvements
+   - Auto-formatting of headings for better hierarchy
+   - Proper spacing between paragraphs
+   - Styled lists (ordered and unordered)
+   - Formatted code blocks with syntax highlighting
+   - Blockquote styling for quoted content
+   - Automatic bolding of important information
+
+3. Pre-processing of AI Responses
+   - Server-side processing of DeepSeek API responses
+   - Conversion of plain text patterns to markdown
+   - Improved readability of lists and structured content
+   - Enhanced spacing and formatting consistency
+
+4. Responsive Design for Formatted Content
+   - Adjusted heading sizes for different screen sizes
+   - Optimized code blocks for mobile viewing
+   - Responsive list styling and indentation
+   - Touch-friendly spacing for mobile interaction
+
+5. Fact-Checking Specific Enhancements
+   - Visual indicators for factual statements with emojis (📝 FACT, 🔎 SOURCE, etc.)
+   - Color-coded sections for different types of content (facts, sources, conclusions)
+   - Highlighted callout boxes for key facts
+   - Visual emphasis for verified/unverified statements
+   - Special formatting for dates, percentages, and metrics
+   - Structured organization with section dividers
+
+These improvements significantly enhance the readability of AI responses,
+particularly for complex information, technical explanations, and
+structured content like lists and code examples. The fact-checking specific
+enhancements create a more trustworthy presentation of information with clear
+visual differentiation between facts, sources, evidence, and conclusions.
+
 === NEXT STEPS ===
 
 1. Enhance DeepSeek API integration with conversation history
@@ -152,4 +228,4 @@ The application integrates with DeepSeek AI through a secure server-side API rou
 4. Add additional UI features like message reactions
 5. Implement typing indicators and read receipts
 
-==================================================== 
+====================================================
