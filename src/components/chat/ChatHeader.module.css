@@ -16,7 +16,7 @@
   font-size: 28px;
   color: white;
   text-align: center;
-  transform: scaleY(-1); /* Invert the F logo vertically */
+  transform: scaleX(-1); /* Mirror the F logo horizontally */
 }
 
 /* Mobile Responsiveness */
