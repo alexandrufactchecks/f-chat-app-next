@@ -140,6 +140,7 @@ export async function POST(request: NextRequest) {
       ],
       max_tokens: 800, // Increased token limit for more detailed responses
       temperature: 0.3, // Lower temperature for more factual responses
+      stream: false, // Disable streaming for now to fix the error
     };
     
     // Log request (for debugging)
@@ -158,21 +159,22 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(deepseekRequestData),
     });
 
-    // Parse response data
-    const responseData = await response.json();
-    
     // Check for API errors
     if (!response.ok) {
-      console.error('DeepSeek API error:', responseData);
+      const errorData = await response.json();
+      console.error('DeepSeek API error:', errorData);
       return NextResponse.json(
         { 
-          error: `DeepSeek API error: ${responseData.error?.message || 'Unknown error'}`,
+          error: `DeepSeek API error: ${errorData.error?.message || 'Unknown error'}`,
           status: response.status,
         },
         { status: response.status }
       );
     }
 
+    // Parse response data
+    const responseData = await response.json();
+    
     // Extract the assistant's message from the response
     let assistantMessage = responseData.choices[0].message.content;
     

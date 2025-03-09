@@ -12,6 +12,7 @@ interface Message {
   text: string;
   type: 'sent' | 'received';
   model?: string; // Optional model information
+  isTyping?: boolean; // Flag for typing animation
 }
 
 interface ExamplePrompt {
@@ -68,11 +69,12 @@ const Chat: React.FC = () => {
       setShowWelcome(false);
     }
     
-    // Add user message
+    // Add user message with typing animation
     const userMessage: Message = {
       id: uuidv4(),
       text,
       type: 'sent',
+      isTyping: true,
     };
     
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -102,15 +104,19 @@ const Chat: React.FC = () => {
         setCurrentModel(data.model);
       }
       
-      // Add AI response to the chat
-      const botMessage: Message = {
-        id: uuidv4(),
-        text: data.text,
-        type: 'received',
-        model: data.model || currentModel,
-      };
+      // Add AI response to the chat with a slight delay to simulate typing
+      setTimeout(() => {
+        const botMessage: Message = {
+          id: uuidv4(),
+          text: data.text,
+          type: 'received',
+          model: data.model || currentModel,
+        };
+        
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+        setIsLoading(false);
+      }, 500); // 500ms delay to simulate typing
       
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (err: any) {
       console.error('Error sending message to DeepSeek:', err);
       setError(err.message || 'An error occurred while getting a response');
@@ -123,7 +129,6 @@ const Chat: React.FC = () => {
       };
       
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -168,7 +173,10 @@ const Chat: React.FC = () => {
               </div>
             </div>
           ) : (
-            <ChatMessages messages={messages} isLoading={isLoading} />
+            <ChatMessages 
+              messages={messages} 
+              isLoading={isLoading}
+            />
           )}
           <ChatInput 
             onSendMessage={handleSendMessage} 
