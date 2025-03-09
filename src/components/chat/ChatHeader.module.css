@@ -58,8 +58,9 @@
 
 .logoSpin {
   display: inline-block;
-  font-size: 22px;
-  font-weight: 800;
+  font-family: 'Agbalumo', cursive;
+  font-size: 24px;
+  font-weight: 400;
   transform: scaleX(-1);
   background: linear-gradient(135deg, var(--accent-color), #818cf8);
   color: white;
@@ -145,7 +146,9 @@
   }
   
   .logoSpin {
-    font-size: 20px;
+    font-family: 'Agbalumo', cursive;
+    font-size: 22px;
+    font-weight: 400;
     width: 32px;
     height: 32px;
     margin-right: 8px;
@@ -184,7 +187,9 @@
   }
   
   .logoSpin {
-    font-size: 18px;
+    font-family: 'Agbalumo', cursive;
+    font-size: 20px;
+    font-weight: 400;
     width: 30px;
     height: 30px;
     margin-right: 6px;
@@ -216,7 +221,9 @@
   }
   
   .logoSpin {
-    font-size: 16px;
+    font-family: 'Agbalumo', cursive;
+    font-size: 18px;
+    font-weight: 400;
     width: 26px;
     height: 26px;
     margin-right: 5px;

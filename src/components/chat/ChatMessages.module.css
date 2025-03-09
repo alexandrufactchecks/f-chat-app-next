@@ -121,8 +121,8 @@
   justify-content: center;
   background: linear-gradient(135deg, var(--accent-color), #818cf8);
   color: white;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 18px;
   margin-right: 12px;
   flex-shrink: 0;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -138,6 +138,7 @@
 .mirroredF {
   display: inline-block;
   transform: scaleX(-1);
+  font-family: 'Agbalumo', cursive;
 }
 
 @keyframes fadeIn {
@@ -214,7 +215,9 @@
   .avatar {
     width: 34px;
     height: 34px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Agbalumo', cursive;
     margin-right: 10px;
     border-radius: 10px;
   }
@@ -246,6 +249,8 @@
     width: 32px;
     height: 32px;
     font-size: 14px;
+    font-weight: 400;
+    font-family: 'Agbalumo', cursive;
     margin-right: 8px;
     border-radius: 8px;
   }
@@ -283,6 +288,8 @@
     width: 28px;
     height: 28px;
     font-size: 12px;
+    font-weight: 400;
+    font-family: 'Agbalumo', cursive;
     margin-right: 6px;
     border-radius: 6px;
   }
