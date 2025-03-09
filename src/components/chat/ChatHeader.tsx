@@ -19,7 +19,8 @@ const ChatHeader: React.FC = () => {
       </div>
       
       <div className={styles.headerRight}>
-        <div className={styles.themeSwitchContainer}>
+        {/* Theme switch hidden but code kept for compatibility */}
+        <div className={styles.themeSwitchContainer} style={{ display: 'none' }}>
           <ThemeSwitch />
         </div>
       </div>
