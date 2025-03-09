@@ -11,11 +11,12 @@
   transition: opacity 0.5s ease, visibility 0.5s;
   color: var(--text-color);
   overflow: hidden;
+  z-index: 1; /* Ensure it's above other elements */
 }
 
 .visible {
-  visibility: visible;
-  opacity: 1;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Fix for iOS keyboard pushing content up */

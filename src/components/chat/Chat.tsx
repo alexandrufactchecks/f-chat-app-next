@@ -19,9 +19,13 @@ const Chat: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    console.log('Chat component mounted');
+    
     // Show welcome message after a delay
     const timer = setTimeout(() => {
+      console.log('Setting chat to visible');
       setIsVisible(true);
+      
       // Add welcome message
       setMessages([
         {
@@ -36,6 +40,8 @@ const Chat: React.FC = () => {
   }, []);
 
   const handleSendMessage = (text: string) => {
+    console.log('Sending message:', text);
+    
     // Add user message
     const userMessage: Message = {
       id: uuidv4(),
@@ -56,6 +62,9 @@ const Chat: React.FC = () => {
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     }, 1000);
   };
+
+  console.log('Rendering Chat component, isVisible:', isVisible);
+  console.log('Current messages:', messages);
 
   return (
     <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''}`}>
