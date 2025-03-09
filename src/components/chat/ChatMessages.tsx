@@ -11,9 +11,10 @@ interface Message {
 
 interface ChatMessagesProps {
   messages: Message[];
+  isLoading?: boolean;
 }
 
-const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
+const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -36,6 +37,17 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
           {message.text}
         </div>
       ))}
+      
+      {isLoading && (
+        <div className={`${styles.message} ${styles.received} ${styles.loading}`}>
+          <div className={styles.loadingDots}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      )}
+      
       <div ref={messagesEndRef} />
     </div>
   );

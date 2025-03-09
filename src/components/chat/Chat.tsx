@@ -17,6 +17,8 @@ interface Message {
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('Chat component mounted');
@@ -30,7 +32,7 @@ const Chat: React.FC = () => {
       setMessages([
         {
           id: uuidv4(),
-          text: 'Welcome to factchecks.eu!',
+          text: 'Welcome to factchecks.eu! Ask me anything for a fact check.',
           type: 'received',
         },
       ]);
@@ -39,8 +41,9 @@ const Chat: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
     console.log('Sending message:', text);
+    setError(null);
     
     // Add user message
     const userMessage: Message = {
@@ -51,16 +54,49 @@ const Chat: React.FC = () => {
     
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     
-    // Simulate response (in a real app, this would be an API call)
-    setTimeout(() => {
+    // Set loading state
+    setIsLoading(true);
+    
+    try {
+      // Call our backend API that interfaces with DeepSeek
+      const response = await fetch('/api/deepseek', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: text }),
+      });
+      
+      const data = await response.json();
+      
+      // Check for errors
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get a response');
+      }
+      
+      // Add AI response to the chat
       const botMessage: Message = {
         id: uuidv4(),
-        text: 'This is a simulated response. In a real app, this would be an API call to your backend.',
+        text: data.text,
         type: 'received',
       };
       
       setMessages((prevMessages) => [...prevMessages, botMessage]);
-    }, 1000);
+    } catch (err: any) {
+      console.error('Error sending message to DeepSeek:', err);
+      setError(err.message || 'An error occurred while getting a response');
+      
+      // Add error message to chat
+      const errorMessage: Message = {
+        id: uuidv4(),
+        text: `Error: ${err.message || 'Failed to get a response. Please try again.'}`,
+        type: 'received',
+      };
+      
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   console.log('Rendering Chat component, isVisible:', isVisible);
@@ -70,8 +106,8 @@ const Chat: React.FC = () => {
     <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''}`}>
       <AnimatedBackground />
       <ChatHeader />
-      <ChatMessages messages={messages} />
-      <ChatInput onSendMessage={handleSendMessage} />
+      <ChatMessages messages={messages} isLoading={isLoading} />
+      <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
     </div>
   );
 };

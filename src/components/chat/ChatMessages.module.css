@@ -46,6 +46,47 @@
   clear: both;
 }
 
+/* Loading animation styles */
+.loading {
+  min-width: 60px;
+  background-color: var(--received-message-bg);
+  padding: 15px;
+}
+
+.loadingDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10px;
+}
+
+.loadingDots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 0 2px;
+  animation: loadingBounce 1.4s infinite ease-in-out both;
+}
+
+.loadingDots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loadingDots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loadingBounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  }
+  40% { 
+    transform: scale(1.0);
+  }
+}
+
 /* Mobile Responsiveness */
 @media screen and (max-width: 768px) {
   .chatMessages {
