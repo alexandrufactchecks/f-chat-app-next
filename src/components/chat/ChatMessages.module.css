@@ -127,18 +127,20 @@
   flex-shrink: 0;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  transform: rotate(-5deg);
 }
 
 .avatar:hover {
-  transform: scale(1.1) rotate(0deg);
+  transform: scale(1.1);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .mirroredF {
   display: inline-block;
   transform: scaleX(-1);
+  font-weight: 400;
+  letter-spacing: -0.5px;
   font-family: 'Agbalumo', cursive;
+  font-size: 1.05em;
 }
 
 @keyframes fadeIn {
@@ -554,9 +556,9 @@
 /* Mirrored F styling for logo-like appearance */
 .mirroredF {
   display: inline-block;
-  transform: scale(-1, 1);
-  font-weight: 700;
+  transform: scaleX(-1);
+  font-weight: 400;
   letter-spacing: -0.5px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Agbalumo', cursive;
   font-size: 1.05em;
 } 

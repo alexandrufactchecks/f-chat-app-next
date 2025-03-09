@@ -76,7 +76,7 @@
 }
 
 .logoSpin:hover {
-  transform: scaleX(-1) translateY(-3px) rotate(-5deg);
+  transform: scaleX(-1) translateY(-3px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
