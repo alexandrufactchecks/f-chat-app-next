@@ -112,17 +112,9 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
     return '';
   };
 
-  // Render message content with typing animation if needed
+  // Render message content without typing animation
   const renderMessageContent = (message: Message) => {
     if (message.type === 'sent') {
-      if (typingAnimations[message.id]) {
-        return (
-          <div className={styles.typingAnimation}>
-            {message.text}
-            <span className={styles.typingCursor}></span>
-          </div>
-        );
-      }
       return message.text;
     } else {
       return (
@@ -132,33 +124,21 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
               h1: ({ node, ...props }) => <h1 className={styles.heading1} {...props} />,
               h2: ({ node, ...props }) => <h2 className={styles.heading2} {...props} />,
               h3: ({ node, children, ...props }) => {
-                // Extract emoji from h3 headings to use as data attributes for styling
-                const content = children?.toString() || '';
-                
-                // Extract the category prefix
-                const categoryMatch = content.match(/^([A-Z]+):/);
-                const category = categoryMatch ? categoryMatch[1] : '';
-                
-                // Get emoji for this heading type
-                const emoji = getEmojiForHeading(category);
+                // Get content as string safely
+                const content = children ? String(children) : '';
                 
                 // Create data attribute for styling
-                const dataContent = emoji ? `${emoji} ${category}` : '';
-                
-                // Format the heading text - remove emoji if it exists at the start
-                let displayText = content;
-                if (displayText.match(/^[📝🔎📊✅🧐⚖️]\s+/)) {
-                  displayText = displayText.replace(/^[📝🔎📊✅🧐⚖️]\s+/, '');
-                }
+                let dataContent = '';
+                if (content.includes('FACT')) dataContent = '📝 FACT';
+                else if (content.includes('SOURCE')) dataContent = '🔎 SOURCE';
+                else if (content.includes('EVIDENCE')) dataContent = '📊 EVIDENCE';
+                else if (content.includes('CONCLUSION')) dataContent = '✅ CONCLUSION';
+                else if (content.includes('ASSESSMENT')) dataContent = '🧐 ASSESSMENT';
+                else if (content.includes('VERDICT')) dataContent = '⚖️ VERDICT';
                 
                 return (
-                  <h3 
-                    className={styles.heading3} 
-                    data-content={dataContent}
-                    {...props}
-                  >
-                    {emoji && <span>{emoji}</span>}
-                    {displayText}
+                  <h3 className={styles.heading3} data-content={dataContent} {...props}>
+                    {content}
                   </h3>
                 );
               },

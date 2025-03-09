@@ -106,87 +106,58 @@ Your goal is to help users distinguish fact from fiction with well-reasoned, evi
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if API key is available
+    // Parse the incoming request body
+    const { message } = await request.json();
+
+    if (!message) {
+      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+    }
+
     if (!API_KEY) {
-      return NextResponse.json(
-        { error: 'DeepSeek API key is missing in server environment' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'API key is not configured' }, { status: 500 });
     }
 
-    // Get request body
-    const requestData = await request.json();
-    
-    // Validate request data
-    if (!requestData.message) {
-      return NextResponse.json(
-        { error: 'Message is required' },
-        { status: 400 }
-      );
-    }
-
-    // Prepare data for DeepSeek API
-    const deepseekRequestData = {
-      model: 'deepseek-reasoner', // Updated to use the reasoner model
-      messages: [
-        {
-          role: 'system',
-          content: getSystemPrompt(),
-        },
-        {
-          role: 'user',
-          content: requestData.message,
-        },
-      ],
-      max_tokens: 800, // Increased token limit for more detailed responses
-      temperature: 0.3, // Lower temperature for more factual responses
-      stream: false, // Disable streaming for now to fix the error
-    };
-    
-    // Log request (for debugging)
-    console.log('Sending request to DeepSeek API:', {
-      url: DEEPSEEK_API_URL,
-      model: deepseekRequestData.model,
-    });
-
-    // Call DeepSeek API
+    // Prepare the request to DeepSeek API
     const response = await fetch(DEEPSEEK_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${API_KEY}`,
       },
-      body: JSON.stringify(deepseekRequestData),
+      body: JSON.stringify({
+        model: 'deepseek-reasoner',
+        messages: [
+          { role: 'system', content: getSystemPrompt() },
+          { role: 'user', content: message }
+        ],
+        temperature: 0.7,
+        max_tokens: 4000,
+        stream: false, // Disable streaming to ensure complete responses
+      }),
     });
 
-    // Check for API errors
+    // Check if the request was successful
     if (!response.ok) {
       const errorData = await response.json();
       console.error('DeepSeek API error:', errorData);
-      return NextResponse.json(
-        { 
-          error: `DeepSeek API error: ${errorData.error?.message || 'Unknown error'}`,
-          status: response.status,
-        },
-        { status: response.status }
-      );
+      return NextResponse.json({ 
+        error: 'Failed to get a response from DeepSeek API',
+        details: errorData
+      }, { status: response.status });
     }
 
-    // Parse response data
-    const responseData = await response.json();
+    // Parse the response
+    const data = await response.json();
     
-    // Extract the assistant's message from the response
-    let assistantMessage = responseData.choices[0].message.content;
-    
-    // Apply formatting to improve readability
-    assistantMessage = formatResponseText(assistantMessage);
-    
-    // Return successful response
-    return NextResponse.json({
-      text: assistantMessage,
-      model: deepseekRequestData.model,
+    // Extract and format the response text
+    const responseText = data.choices[0]?.message?.content || '';
+    const formattedText = formatResponseText(responseText);
+
+    // Return the formatted response
+    return NextResponse.json({ 
+      response: formattedText,
+      model: 'DeepSeek Reasoner'
     });
-    
   } catch (error: any) {
     // Log error for debugging
     console.error('Error calling DeepSeek API:', error);

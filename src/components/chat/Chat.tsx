@@ -69,12 +69,11 @@ const Chat: React.FC = () => {
       setShowWelcome(false);
     }
     
-    // Add user message with typing animation
+    // Add user message without typing animation
     const userMessage: Message = {
       id: uuidv4(),
       text,
       type: 'sent',
-      isTyping: true,
     };
     
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -104,18 +103,16 @@ const Chat: React.FC = () => {
         setCurrentModel(data.model);
       }
       
-      // Add AI response to the chat with a slight delay to simulate typing
-      setTimeout(() => {
-        const botMessage: Message = {
-          id: uuidv4(),
-          text: data.text,
-          type: 'received',
-          model: data.model || currentModel,
-        };
-        
-        setMessages((prevMessages) => [...prevMessages, botMessage]);
-        setIsLoading(false);
-      }, 500); // 500ms delay to simulate typing
+      // Add AI response message
+      const aiMessage: Message = {
+        id: uuidv4(),
+        text: data.response, // Updated to use the new response format
+        type: 'received',
+        model: data.model || 'AI Assistant',
+      };
+      
+      setMessages((prevMessages) => [...prevMessages, aiMessage]);
+      setIsLoading(false);
       
     } catch (err: any) {
       console.error('Error sending message to DeepSeek:', err);
