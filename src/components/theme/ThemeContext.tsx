@@ -24,21 +24,31 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  // Always use dark theme
+  // Initialize theme from localStorage or default to dark
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    // Always set to dark theme regardless of localStorage
-    setTheme('dark');
-    document.documentElement.setAttribute('data-theme', 'dark');
-    // Store dark theme in localStorage for consistency
-    localStorage.setItem('theme', 'dark');
+    // Check if theme is stored in localStorage
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    
+    // If theme exists in localStorage, use it
+    if (storedTheme && (storedTheme === 'dark' || storedTheme === 'light')) {
+      setTheme(storedTheme);
+      document.documentElement.setAttribute('data-theme', storedTheme);
+    } else {
+      // Default to dark theme
+      setTheme('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
   }, []);
 
-  // Toggle function exists but does nothing to maintain API compatibility
+  // Toggle between dark and light themes
   const toggleTheme = () => {
-    // Do nothing - always stay in dark mode
-    console.log('Theme switching is disabled');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
   };
 
   return (

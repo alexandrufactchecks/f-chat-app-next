@@ -32,7 +32,7 @@ const Chat: React.FC = () => {
       setMessages([
         {
           id: uuidv4(),
-          text: 'Welcome to FactChecks.eu! I\'m your AI fact-checking assistant. Ask me anything, and I\'ll help verify information or answer your questions with reliable sources.',
+          text: 'Welcome to FactCheck! I\'m your AI fact-checking assistant. Ask me anything, and I\'ll help verify information or answer your questions with reliable sources.',
           type: 'received',
         },
       ]);
@@ -100,7 +100,7 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''}`}>
+    <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''} animate-fade-in`}>
       <AnimatedBackground />
       <div className={styles.chatMain}>
         <ChatHeader />

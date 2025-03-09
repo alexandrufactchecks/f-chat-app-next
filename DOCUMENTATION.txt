@@ -1,5 +1,5 @@
 ====================================================
-FACTCHECKS.EU CHAT APPLICATION DOCUMENTATION
+FACTCHECK CHAT APPLICATION DOCUMENTATION
 ====================================================
 
 === PROJECT OVERVIEW ===

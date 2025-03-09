@@ -39,12 +39,6 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
     return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // Format text with paragraph breaks
-  const formatMessageText = (text: string) => {
-    // For sent messages (user messages), just display the plain text
-    return text;
-  };
-
   return (
     <div className={styles.chatMessages}>
       <div className={styles.messagesContainer}>
@@ -62,7 +56,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
             )}
             <div className={styles.bubbleContainer}>
               {message.type === 'received' && (
-                <div className={styles.messageSender}>FactChecks.eu</div>
+                <div className={styles.messageSender}>FactCheck</div>
               )}
               <div
                 className={`${styles.message} ${
@@ -122,7 +116,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, isLoading = false
               <span className={styles.mirroredF}>F</span>
             </div>
             <div className={styles.bubbleContainer}>
-              <div className={styles.messageSender}>FactChecks.eu</div>
+              <div className={styles.messageSender}>FactCheck</div>
               <div className={styles.loading}>
                 <div className={styles.loadingDots}>
                   <span></span>

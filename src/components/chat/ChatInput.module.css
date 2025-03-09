@@ -1,6 +1,6 @@
 .chatInputContainer {
-  padding: 12px 10px 20px;
-  background-color: transparent;
+  padding: 16px 10px 24px;
+  background-color: transparent !important;
   position: relative;
   z-index: 20;
   flex-shrink: 0;
@@ -8,38 +8,51 @@
   display: flex;
   justify-content: center;
   margin-top: auto;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+.chatInputContainer::before,
+.chatInputContainer::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
 }
 
 [data-theme="light"] .chatInputContainer {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: transparent !important;
+  border-top: none !important;
 }
 
 .chatInputWrapper {
   display: flex;
   align-items: center;
   background-color: var(--input-bg);
-  border-radius: 24px;
-  padding: 6px 8px 6px 16px;
-  transition: all 0.3s ease;
+  border-radius: 16px;
+  padding: 10px 12px 10px 20px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   width: 100%;
   max-width: 900px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
 }
 
 .chatInputWrapper:focus-within {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
   border-color: var(--accent-color);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  background-color: var(--input-focus);
 }
 
 .messageInput {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 10px 5px;
+  padding: 12px 8px;
   font-size: 15px;
   color: var(--text-color);
   outline: none;
@@ -48,11 +61,18 @@
   resize: none;
   max-height: 120px;
   min-height: 24px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
 }
 
 .messageInput::placeholder {
   color: var(--text-secondary);
   opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.messageInput:focus::placeholder {
+  opacity: 0.4;
 }
 
 .messageInput:disabled {
@@ -61,26 +81,44 @@
 }
 
 .sendButton {
-  background: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), #818cf8);
   border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
-  margin-left: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-left: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.sendButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .sendButton:hover {
-  background-color: var(--button-hover);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.sendButton:hover::before {
+  opacity: 1;
 }
 
 .sendButton:active {
@@ -93,32 +131,69 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: var(--text-secondary);
 }
 
 .sendButton svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   fill: white;
+  transition: transform 0.3s ease;
+}
+
+.sendButton:hover svg {
+  transform: translateX(3px);
 }
 
 /* Tablet */
 @media screen and (max-width: 900px) {
   .chatInputContainer {
-    padding: 10px 8px 16px;
+    padding: 14px 8px 20px;
   }
   
   .chatInputWrapper {
-    padding: 5px 8px 5px 14px;
+    padding: 8px 10px 8px 18px;
+    border-radius: 14px;
   }
   
   .messageInput {
     font-size: 14px;
-    padding: 8px 5px;
+    padding: 10px 6px;
   }
   
   .sendButton {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+  
+  .sendButton svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+  .chatInputContainer {
+    padding: 12px 6px 18px;
+  }
+  
+  .chatInputWrapper {
+    padding: 7px 8px 7px 16px;
+    border-radius: 12px;
+  }
+  
+  .messageInput {
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+  
+  .sendButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-left: 10px;
   }
   
   .sendButton svg {
@@ -127,40 +202,15 @@
   }
 }
 
-/* Mobile */
-@media screen and (max-width: 600px) {
-  .chatInputContainer {
-    padding: 8px 6px 14px;
-  }
-  
-  .chatInputWrapper {
-    padding: 4px 6px 4px 12px;
-  }
-  
-  .messageInput {
-    padding: 6px 4px;
-    font-size: 14px;
-  }
-  
-  .sendButton {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .sendButton svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
 /* Small Mobile */
 @media screen and (max-width: 375px) {
   .chatInputContainer {
-    padding: 6px 4px 10px;
+    padding: 10px 4px 14px;
   }
   
   .chatInputWrapper {
-    padding: 3px 4px 3px 10px;
+    padding: 6px 6px 6px 14px;
+    border-radius: 10px;
   }
   
   .messageInput {
@@ -169,21 +219,22 @@
   }
   
   .sendButton {
-    width: 32px;
-    height: 32px;
-    margin-left: 4px;
+    width: 36px;
+    height: 36px;
+    margin-left: 8px;
+    border-radius: 10px;
   }
   
   .sendButton svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 }
 
 /* Fix for iPhone X and newer with notches */
 @supports (padding: max(0px)) {
   .chatInputContainer {
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
     padding-left: max(10px, env(safe-area-inset-left));
     padding-right: max(10px, env(safe-area-inset-right));
   }

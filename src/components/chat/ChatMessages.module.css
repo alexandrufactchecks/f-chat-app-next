@@ -26,7 +26,7 @@
   display: flex;
   margin-bottom: 24px;
   width: 100%;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   align-items: flex-start;
 }
 
@@ -48,55 +48,61 @@
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 4px;
-  color: var(--accent-color);
+  background: linear-gradient(90deg, var(--accent-color), #818cf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   padding-left: 8px;
 }
 
 .message {
-  padding: 14px 18px;
-  border-radius: 18px;
-  line-height: 1.5;
+  padding: 16px 20px;
+  border-radius: 16px;
+  line-height: 1.6;
   color: var(--text-color);
   position: relative;
   word-wrap: break-word;
   font-size: 15px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--border-color);
 }
 
 .received {
   background-color: var(--received-message-bg);
   border-bottom-left-radius: 4px;
   text-align: left;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
 }
 
 .received:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .sent {
-  background-color: var(--sent-message-bg);
+  background: linear-gradient(135deg, var(--accent-color), #818cf8);
   border-bottom-right-radius: 4px;
   color: white;
   text-align: right;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  border: none;
 }
 
 .sent:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .messageTime {
   font-size: 11px;
   color: var(--text-secondary);
-  margin-top: 5px;
+  margin-top: 6px;
   opacity: 0.8;
   align-self: flex-start;
   padding-left: 8px;
+  font-weight: 500;
 }
 
 .sentWrapper .messageTime {
@@ -107,56 +113,67 @@
 
 /* Avatar styling */
 .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), #818cf8);
   color: white;
   font-weight: 600;
   font-size: 16px;
   margin-right: 12px;
   flex-shrink: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  transform: rotate(-5deg);
 }
 
 .avatar:hover {
-  transform: scale(1.05);
+  transform: scale(1.1) rotate(0deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.mirroredF {
+  display: inline-block;
+  transform: scaleX(-1);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* Loading animation styles */
 .loading {
-  min-width: 60px;
+  min-width: 80px;
   background-color: var(--received-message-bg);
-  padding: 14px 18px;
-  border-radius: 18px;
+  padding: 16px 20px;
+  border-radius: 16px;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--border-color);
 }
 
 .loadingDots {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 10px;
+  height: 12px;
 }
 
 .loadingDots span {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.8);
-  margin: 0 2px;
+  background: linear-gradient(135deg, var(--accent-color), #818cf8);
+  margin: 0 3px;
   animation: loadingBounce 1.4s infinite ease-in-out both;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .loadingDots span:nth-child(1) {
@@ -170,9 +187,11 @@
 @keyframes loadingBounce {
   0%, 80%, 100% { 
     transform: scale(0);
+    opacity: 0.5;
   }
   40% { 
     transform: scale(1.0);
+    opacity: 1;
   }
 }
 
@@ -187,15 +206,22 @@
   }
   
   .message {
-    padding: 12px 16px;
+    padding: 14px 18px;
     font-size: 14px;
+    border-radius: 14px;
   }
   
   .avatar {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     font-size: 14px;
     margin-right: 10px;
+    border-radius: 10px;
+  }
+  
+  .loading {
+    padding: 14px 18px;
+    border-radius: 14px;
   }
 }
 
@@ -210,15 +236,30 @@
   }
   
   .message {
-    padding: 10px 14px;
+    padding: 12px 16px;
     font-size: 14px;
+    border-radius: 12px;
+    line-height: 1.5;
   }
   
   .avatar {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     font-size: 14px;
     margin-right: 8px;
+    border-radius: 8px;
+  }
+  
+  .loading {
+    padding: 12px 16px;
+    border-radius: 12px;
+    min-width: 70px;
+  }
+  
+  .loadingDots span {
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
   }
 }
 
@@ -233,8 +274,9 @@
   }
   
   .message {
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 13px;
+    border-radius: 10px;
   }
   
   .avatar {
@@ -242,5 +284,272 @@
     height: 28px;
     font-size: 12px;
     margin-right: 6px;
+    border-radius: 6px;
   }
+  
+  .loading {
+    padding: 10px 14px;
+    border-radius: 10px;
+    min-width: 60px;
+  }
+  
+  .loadingDots span {
+    width: 6px;
+    height: 6px;
+    margin: 0 2px;
+  }
+}
+
+/* Formatted message styles */
+.formattedMessage {
+  text-align: left;
+  line-height: 1.5;
+}
+
+.formattedMessage p {
+  margin-bottom: 12px;
+}
+
+.formattedMessage p:last-child {
+  margin-bottom: 0;
+}
+
+/* Heading styles */
+.heading1 {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 16px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--accent-color);
+}
+
+.heading2 {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin: 14px 0 8px;
+  color: var(--accent-color);
+}
+
+.heading3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 12px 0 6px;
+}
+
+/* List styles */
+.unorderedList, .orderedList {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.listItem {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+/* Code styles */
+.inlineCode {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.codeBlockContainer {
+  margin: 10px 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.codeBlock {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+/* Divider styles */
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 16px 0;
+}
+
+/* Blockquote styles */
+.blockquote {
+  border-left: 3px solid var(--accent-color);
+  padding-left: 12px;
+  margin: 10px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Paragraph spacing */
+.paragraph {
+  margin: 8px 0;
+}
+
+/* Mobile responsiveness for formatted content */
+@media screen and (max-width: 600px) {
+  .heading1 {
+    font-size: 1.3em;
+    margin: 14px 0 8px;
+  }
+  
+  .heading2 {
+    font-size: 1.15em;
+    margin: 12px 0 6px;
+  }
+  
+  .heading3 {
+    font-size: 1.05em;
+    margin: 10px 0 5px;
+  }
+  
+  .unorderedList, .orderedList {
+    padding-left: 16px;
+  }
+  
+  .codeBlock {
+    padding: 8px;
+    font-size: 0.85em;
+  }
+}
+
+/* Small mobile styles */
+@media screen and (max-width: 375px) {
+  .heading1 {
+    font-size: 1.2em;
+  }
+  
+  .heading2 {
+    font-size: 1.1em;
+  }
+  
+  .heading3 {
+    font-size: 1em;
+  }
+  
+  .unorderedList, .orderedList {
+    padding-left: 14px;
+  }
+}
+
+/* Factual content styling */
+.formattedMessage h3 {
+  font-size: 1.05em;
+  font-weight: 600;
+  margin: 14px 0 6px;
+  padding-bottom: 4px;
+  color: var(--accent-color);
+}
+
+/* Fact indicator styles */
+.formattedMessage h3[data-content^="📝 FACT"],
+.formattedMessage h3:first-child {
+  background-color: rgba(46, 204, 113, 0.15);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.formattedMessage h3[data-content^="🔎 SOURCE"] {
+  background-color: rgba(52, 152, 219, 0.15);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.formattedMessage h3[data-content^="📊 EVIDENCE"] {
+  background-color: rgba(155, 89, 182, 0.15);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.formattedMessage h3[data-content^="✅ CONCLUSION"] {
+  background-color: rgba(46, 204, 113, 0.18);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.formattedMessage h3[data-content^="🧐 ASSESSMENT"] {
+  background-color: rgba(241, 196, 15, 0.15);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.formattedMessage h3[data-content^="⚖️ VERDICT"] {
+  background-color: rgba(230, 126, 34, 0.15);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+/* Key fact callout styles */
+.formattedMessage blockquote {
+  background-color: rgba(52, 152, 219, 0.1);
+  border-left: 3px solid rgba(52, 152, 219, 0.8);
+  padding: 10px 12px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Code for dates, percentages and factual metrics */
+.formattedMessage code {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+/* Emphasis for factual statements */
+.formattedMessage strong {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* Separator styling */
+.formattedMessage hr {
+  border: none;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  margin: 18px 0;
+}
+
+/* List styling improvements for factual content */
+.formattedMessage ul li,
+.formattedMessage ol li {
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+
+/* Mobile adjustments for factual content */
+@media screen and (max-width: 600px) {
+  .formattedMessage h3 {
+    font-size: 1em;
+    padding: 6px 8px;
+  }
+  
+  .formattedMessage blockquote {
+    padding: 8px 10px;
+    margin: 10px 0;
+  }
+}
+
+/* Mirrored F styling for logo-like appearance */
+.mirroredF {
+  display: inline-block;
+  transform: scale(-1, 1);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-family: 'Arial', sans-serif;
+  font-size: 1.05em;
 } 

@@ -10,7 +10,7 @@
   flex-direction: column;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.5s ease, visibility 0.5s;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
   color: var(--text-color);
   overflow: hidden;
   z-index: 1; /* Ensure it's above other elements */
@@ -23,7 +23,7 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, var(--accent-color), var(--header-bg));
+  background: linear-gradient(90deg, var(--accent-color), #818cf8);
   z-index: 20;
 }
 
@@ -39,6 +39,7 @@
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
+  padding: 16px 0;
 }
 
 .chatContent {
@@ -49,8 +50,20 @@
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
   justify-content: space-between;
+  position: relative;
+  /* Additional fixes to ensure clean layout */
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure no unwanted elements appear */
+.chatContent::before,
+.chatContent::after {
+  content: none !important;
+  display: none !important;
 }
 
 .visible {
@@ -62,45 +75,68 @@
 @keyframes fadeIn {
   0% {
     opacity: 0;
+    transform: translateY(10px);
   }
   100% {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 /* Media queries for different devices */
-@media screen and (min-width: 1024px) {
-  .chatScreen {
-    width: 90%;
-    height: 90%;
-    top: 5%;
-    left: 5%;
-    max-width: 1200px;
+@media screen and (min-width: 1200px) {
+  .chatMain {
+    padding: 24px 0;
+  }
+  
+  .chatContent {
+    max-width: 1100px;
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 1024px) and (max-width: 1199px) {
+  .chatMain {
+    padding: 20px 0;
+  }
+  
+  .chatContent {
+    max-width: 900px;
   }
 }
 
 /* Tablet devices */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  .chatScreen {
-    width: 92%;
-    height: 92%;
-    top: 4%;
-    left: 4%;
+  .chatMain {
+    padding: 16px 0;
+  }
+  
+  .chatContent {
+    padding: 0 16px;
+    max-width: 800px;
   }
 }
 
 /* Mobile layout adjustments */
 @media screen and (max-width: 767px) {
+  .chatMain {
+    padding: 12px 0;
+  }
+  
   .chatContent {
-    padding: 0 8px;
+    padding: 0 12px;
     max-width: 100%;
   }
 }
 
 /* Small mobile devices */
 @media screen and (max-width: 480px) {
+  .chatMain {
+    padding: 8px 0;
+  }
+  
   .chatContent {
-    padding: 0 4px;
+    padding: 0 8px;
   }
 }
 
