@@ -89,13 +89,27 @@ const Chat: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ message: text }),
+        // Add timeout for fetch request
+        signal: AbortSignal.timeout(60000), // 60 second timeout
       });
       
-      const data = await response.json();
+      // First try to get the response as text
+      const responseText = await response.text();
+      
+      // Then try to parse it as JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Error parsing JSON response:', parseError);
+        throw new Error(`Failed to parse response: ${responseText.substring(0, 100)}...`);
+      }
       
       // Check for errors
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to get a response');
+        const errorMessage = data.error || 'Failed to get a response';
+        console.error('API error:', data);
+        throw new Error(errorMessage);
       }
       
       // Update current model if provided in the response
@@ -103,10 +117,16 @@ const Chat: React.FC = () => {
         setCurrentModel(data.model);
       }
       
+      // Validate response format
+      if (!data.response) {
+        console.error('Invalid response format:', data);
+        throw new Error('Invalid response format from server');
+      }
+      
       // Add AI response message
       const aiMessage: Message = {
         id: uuidv4(),
-        text: data.response, // Updated to use the new response format
+        text: data.response,
         type: 'received',
         model: data.model || 'AI Assistant',
       };
@@ -116,16 +136,19 @@ const Chat: React.FC = () => {
       
     } catch (err: any) {
       console.error('Error sending message to DeepSeek:', err);
-      setError(err.message || 'An error occurred while getting a response');
       
-      // Add error message to chat
-      const errorMessage: Message = {
-        id: uuidv4(),
-        text: `Sorry, I encountered an error: ${err.message || 'Failed to get a response. Please try again.'}`,
-        type: 'received',
-      };
+      // Handle different error types
+      let errorMessage = 'Failed to get a response. Please try again.';
       
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      if (err.name === 'AbortError') {
+        errorMessage = 'Request timed out. Please try a shorter message or try again later.';
+      } else if (err.message.includes('JSON')) {
+        errorMessage = 'Error processing response. Please try again.';
+      } else if (typeof err.message === 'string') {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
       setIsLoading(false);
     }
   };

@@ -117,57 +117,110 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'API key is not configured' }, { status: 500 });
     }
 
-    // Prepare the request to DeepSeek API
-    const response = await fetch(DEEPSEEK_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'deepseek-reasoner',
-        messages: [
-          { role: 'system', content: getSystemPrompt() },
-          { role: 'user', content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 4000,
-        stream: false, // Disable streaming to ensure complete responses
-      }),
-    });
-
-    // Check if the request was successful
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('DeepSeek API error:', errorData);
-      return NextResponse.json({ 
-        error: 'Failed to get a response from DeepSeek API',
-        details: errorData
-      }, { status: response.status });
-    }
-
-    // Parse the response
-    const data = await response.json();
+    // Prepare the request to DeepSeek API with timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
     
-    // Extract and format the response text
-    const responseText = data.choices[0]?.message?.content || '';
-    const formattedText = formatResponseText(responseText);
+    try {
+      const response = await fetch(DEEPSEEK_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'deepseek-reasoner',
+          messages: [
+            { role: 'system', content: getSystemPrompt() },
+            { role: 'user', content: message }
+          ],
+          temperature: 0.7,
+          max_tokens: 2000, // Reduced from 4000 to help with timeouts
+          stream: false,
+        }),
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
 
-    // Return the formatted response
-    return NextResponse.json({ 
-      response: formattedText,
-      model: 'DeepSeek Reasoner'
-    });
+      // Handle non-200 responses
+      if (!response.ok) {
+        let errorMessage = `DeepSeek API error: ${response.status} ${response.statusText}`;
+        let errorDetails = {};
+        
+        try {
+          // Try to parse error response as JSON
+          errorDetails = await response.json();
+        } catch (e) {
+          // If parsing fails, try to get text
+          try {
+            const textError = await response.text();
+            errorDetails = { rawError: textError };
+          } catch (textError) {
+            errorDetails = { message: 'Could not parse error response' };
+          }
+        }
+        
+        console.error(errorMessage, errorDetails);
+        
+        return NextResponse.json({ 
+          error: errorMessage,
+          details: errorDetails
+        }, { status: response.status });
+      }
+
+      // Safely parse the response
+      let data;
+      try {
+        const responseText = await response.text();
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Error parsing DeepSeek response:', parseError);
+        return NextResponse.json({ 
+          error: 'Failed to parse DeepSeek API response',
+          details: { message: 'Invalid JSON in response' }
+        }, { status: 500 });
+      }
+      
+      // Extract and format the response text
+      const responseText = data.choices?.[0]?.message?.content || '';
+      if (!responseText) {
+        return NextResponse.json({ 
+          error: 'Empty response from DeepSeek API',
+          details: { data }
+        }, { status: 500 });
+      }
+      
+      const formattedText = formatResponseText(responseText);
+
+      // Return the formatted response
+      return NextResponse.json({ 
+        response: formattedText,
+        model: 'DeepSeek Reasoner'
+      });
+      
+    } catch (fetchError: any) {
+      clearTimeout(timeoutId);
+      
+      // Handle timeout specifically
+      if (fetchError.name === 'AbortError') {
+        return NextResponse.json({ 
+          error: 'Request to DeepSeek API timed out after 30 seconds',
+          details: { message: 'Consider trying a shorter query' }
+        }, { status: 504 });
+      }
+      
+      throw fetchError; // Re-throw for the outer catch block
+    }
+    
   } catch (error: any) {
     // Log error for debugging
     console.error('Error calling DeepSeek API:', error);
     
-    // Return error response
-    return NextResponse.json(
-      { 
-        error: error.message || 'An error occurred while processing your request',
-      },
-      { status: 500 }
-    );
+    // Return error response with safe error message
+    return NextResponse.json({ 
+      error: 'An error occurred while processing your request',
+      details: { message: error.message || 'Unknown error' }
+    }, { status: 500 });
   }
 } 
