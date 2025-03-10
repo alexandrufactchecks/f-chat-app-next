@@ -73,6 +73,31 @@
   border-radius: 12px;
   margin-left: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+}
+
+.modelBadge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.modelBadge:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reasonerModel {
+  background-color: #8b5cf6; /* Purple for reasoner model */
+}
+
+.lockIcon {
+  font-size: 10px;
+  margin-left: 2px;
 }
 
 /* Version badge */
@@ -171,6 +196,40 @@
 }
 
 /* Mobile */
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  .chatHeader {
+    padding: 8px 14px;
+  }
+  
+  .headerLogo {
+    font-size: 16px;
+  }
+  
+  .logoSpin {
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+  }
+  
+  .modelBadge {
+    font-size: 10px;
+    padding: 3px 7px;
+    margin-left: 8px;
+  }
+  
+  .versionBadge {
+    font-size: 10px;
+    padding: 3px 6px;
+    margin-left: 8px;
+  }
+  
+  .themeSwitchContainer {
+    margin-left: 8px;
+  }
+}
+
+/* Small Mobile */
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .chatHeader {
     padding: 8px 14px;

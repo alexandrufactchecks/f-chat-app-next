@@ -107,7 +107,7 @@ Your goal is to help users distinguish fact from fiction with well-reasoned, evi
 export async function POST(request: NextRequest) {
   try {
     // Parse the incoming request body
-    const { message } = await request.json();
+    const { message, model = 'deepseek-chat' } = await request.json();
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
@@ -115,6 +115,18 @@ export async function POST(request: NextRequest) {
 
     if (!API_KEY) {
       return NextResponse.json({ error: 'API key is not configured' }, { status: 500 });
+    }
+
+    // Check if trying to use reasoner model without premium access
+    const isPremiumUser = false; // This would be determined by your auth system
+    if (model === 'deepseek-reasoner' && !isPremiumUser) {
+      return NextResponse.json({ 
+        error: 'Access to DeepSeek Reasoner requires premium access',
+        details: { 
+          message: 'Please upgrade to premium to use the advanced reasoning model',
+          isPremiumFeature: true
+        }
+      }, { status: 403 });
     }
 
     // Prepare the request to DeepSeek API with timeout handling
@@ -129,7 +141,7 @@ export async function POST(request: NextRequest) {
           'Authorization': `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'deepseek-reasoner',
+          model: model, // Use the model parameter
           messages: [
             { role: 'system', content: getSystemPrompt() },
             { role: 'user', content: message }

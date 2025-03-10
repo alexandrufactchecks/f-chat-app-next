@@ -25,8 +25,10 @@ const Chat: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentModel, setCurrentModel] = useState<string>('deepseek-reasoner');
+  const [currentModel, setCurrentModel] = useState<string>('deepseek-chat');
   const [showWelcome, setShowWelcome] = useState(true);
+  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
+  const [showPremiumModal, setShowPremiumModal] = useState<boolean>(false);
 
   // Example prompts for users to try
   const examplePrompts: ExamplePrompt[] = [
@@ -60,6 +62,30 @@ const Chat: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Handle model change
+  const handleModelChange = (model: string) => {
+    if (model === 'deepseek-reasoner' && !isPremiumUser) {
+      // Show premium modal instead of changing model
+      setShowPremiumModal(true);
+      return;
+    }
+    
+    setCurrentModel(model);
+    console.log(`Model changed to: ${model}`);
+  };
+
+  // Handle premium upgrade
+  const handlePremiumUpgrade = () => {
+    // This would connect to your payment system
+    alert('This would redirect to a payment page in a real application.');
+    setShowPremiumModal(false);
+    
+    // For demo purposes, let's simulate becoming a premium user
+    // In a real app, this would be handled by your auth system
+    setIsPremiumUser(true);
+    setCurrentModel('deepseek-reasoner');
+  };
+
   const handleSendMessage = async (text: string) => {
     console.log('Sending message:', text);
     setError(null);
@@ -88,7 +114,10 @@ const Chat: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({ 
+          message: text,
+          model: currentModel
+        }),
         // Add timeout for fetch request
         signal: AbortSignal.timeout(60000), // 60 second timeout
       });
@@ -109,6 +138,12 @@ const Chat: React.FC = () => {
       if (!response.ok) {
         const errorMessage = data.error || 'Failed to get a response';
         console.error('API error:', data);
+        
+        // Check if this is a premium feature error
+        if (data.details?.isPremiumFeature) {
+          setShowPremiumModal(true);
+        }
+        
         throw new Error(errorMessage);
       }
       
@@ -141,14 +176,23 @@ const Chat: React.FC = () => {
       let errorMessage = 'Failed to get a response. Please try again.';
       
       if (err.name === 'AbortError') {
-        errorMessage = 'Request timed out. Please try a shorter message or try again later.';
+        errorMessage = 'Request timed out. Please try a shorter or more specific question.';
       } else if (err.message.includes('JSON')) {
         errorMessage = 'Error processing response. Please try again.';
       } else if (typeof err.message === 'string') {
         errorMessage = err.message;
       }
       
-      setError(errorMessage);
+      // Add error message to chat
+      const errorMessageObj: Message = {
+        id: uuidv4(),
+        text: errorMessage,
+        type: 'received',
+        model: 'System',
+      };
+      
+      setMessages((prevMessages) => [...prevMessages, errorMessageObj]);
+      setError(null); // Clear the error state since we're showing it in the chat
       setIsLoading(false);
     }
   };
@@ -160,7 +204,11 @@ const Chat: React.FC = () => {
   return (
     <div className={`${styles.chatScreen} ${isVisible ? styles.visible : ''} animate-fade-in`}>
       <div className={styles.chatMain}>
-        <ChatHeader model={currentModel} />
+        <ChatHeader 
+          model={currentModel} 
+          onModelChange={handleModelChange}
+          isPremiumUser={isPremiumUser}
+        />
         <div className={styles.chatContent}>
           {showWelcome ? (
             <div className={styles.welcomeContainer}>
@@ -205,6 +253,38 @@ const Chat: React.FC = () => {
           />
         </div>
       </div>
+      
+      {/* Premium Feature Modal */}
+      {showPremiumModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowPremiumModal(false)}>
+          <div className={styles.premiumModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.premiumModalHeader}>
+              <h2>Premium Feature</h2>
+              <button className={styles.closeButton} onClick={() => setShowPremiumModal(false)}>×</button>
+            </div>
+            <div className={styles.premiumModalContent}>
+              <div className={styles.premiumIcon}>🔒</div>
+              <h3>DeepSeek Reasoner</h3>
+              <p>Access to our advanced reasoning model requires a premium subscription.</p>
+              <p>Upgrade to premium for:</p>
+              <ul>
+                <li>Advanced reasoning capabilities</li>
+                <li>More detailed fact-checking</li>
+                <li>Higher accuracy in complex topics</li>
+                <li>Priority API access</li>
+              </ul>
+            </div>
+            <div className={styles.premiumModalFooter}>
+              <button className={styles.upgradeButton} onClick={handlePremiumUpgrade}>
+                Upgrade to Premium
+              </button>
+              <button className={styles.cancelButton} onClick={() => setShowPremiumModal(false)}>
+                Maybe Later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
